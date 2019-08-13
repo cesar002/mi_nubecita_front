@@ -1,7 +1,8 @@
 import React from 'react'
-import {Menu, Segment, Button, Container, Icon, Header} from 'semantic-ui-react';
+import {Menu, Segment, Button, Container, Icon, Header, Grid} from 'semantic-ui-react';
+import {withRouter} from 'react-router-dom'
 
-const Principal = () =>(
+const Principal = (props) => (
     <React.Fragment>
         <Menu attached = 'top' pointing size='large' inverted>
             <Menu.Item 
@@ -10,25 +11,28 @@ const Principal = () =>(
             />
             <Menu.Menu position = 'right' >
                 <Menu.Item >
-                    <Button primary>Login</Button>
+                    <Button primary onClick={()=>{props.history.push("/login")}}>Login</Button>
                 </Menu.Item>
                 <Menu.Item >
-                    <Button secondary >Registrarse</Button>
+                    <Button secondary onClick={()=>{props.history.push("/registrarse")}}>Registrarse</Button>
                 </Menu.Item>
             </Menu.Menu>
         </Menu>
-        <Container fluid textAlign='center'
-            style = {{
-                background: 'url(../images/backgorund.jpg)',
-                backgroundPositionX: 'center',
-                backgroundPositionY: 'center',
-            }}
-        >   
+        <Container fluid textAlign='center'>   
+
+            <Segment         
+                style = {{
+                    background: 'url(../images/backgorund.jpg)',
+                    backgroundPositionX: 'center',
+                    backgroundPositionY: 'center',
+                    minHeight: '40rem',
+                }}>
+
                 <Header as='h1' inverted
                     style ={{
                         fontSize: '4em',
                         marginBottom: 0,
-                        // marginTop: '3em',
+                        marginTop: '3em',
                     }}
                 >
                     MI NUBECITA
@@ -36,15 +40,18 @@ const Principal = () =>(
                 <Header as = 'h2' inverted>
                     El lugar mas seguro para tus archivos
                 </Header>
+
                 <Button primary size='huge'
                     style={{
                         marginBottom: 0,
-                        // marginTop: '2em'
+                        marginTop: '3em'
                     }}
+                    onClick = {()=>{props.history.push('/login')}}
                 >
                     Entrar a nubecita
                     <Icon name='right arrow' />
                 </Button>
+            </Segment>
         </Container>
         <Container>
 
@@ -52,4 +59,4 @@ const Principal = () =>(
     </React.Fragment>
 )
 
-export default Principal;
+export default withRouter(Principal);
