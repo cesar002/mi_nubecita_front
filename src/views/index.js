@@ -1,5 +1,5 @@
 import React from 'react'
-import {Menu, Segment, Button, Container, Icon, Header, Grid} from 'semantic-ui-react';
+import {Menu, Segment, Button, Container, Icon, Header} from 'semantic-ui-react';
 import {withRouter} from 'react-router-dom'
 
 const Principal = (props) => (
