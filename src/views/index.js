@@ -20,7 +20,7 @@ const Principal = (props) => (
         </Menu>
         <Container fluid textAlign='center'>   
 
-            <Segment         
+            <Segment basic         
                 style = {{
                     background: 'url(../images/backgorund.jpg)',
                     backgroundPositionX: 'center',

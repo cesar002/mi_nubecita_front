@@ -1,37 +1,32 @@
 import React, {Component} from 'react'
 import {Link, withRouter} from 'react-router-dom'
 import {Segment, Form, Button, Grid, Header, Label, Message, } from 'semantic-ui-react'
+import {connect} from 'react-redux'
+import { reduxForm, Field } from 'redux-form'
 
 import Loader from '../components/Loading';
 
-import {EMAIL_EXPRESSION} from '../utils/RegExpresions'
 import {SESSION_NAME} from '../utils/Constants'
+import { loginValidador as validate } from '../utils/ReduxFormValidations'
+
 import LocalStorageService from '../services/LocalStorageService';
+
+
 
 class Login extends Component{
 
     constructor(props){
         super(props)
 
+        this.renderField = this.renderField.bind(this)
         this.iniciarSesion = this.iniciarSesion.bind(this)
         this.guardarSesion = this.guardarSesion.bind(this)
         this.redirectSiExisteSesion = this.redirectSiExisteSesion.bind(this)
-        this.validarCorreo = this.validarCorreo.bind(this)
-        this.validarCamposLogin = this.validarCamposLogin.bind(this)
 
         this.state = {
-            responseresult: null,
-            email: '',
-            pass: '',
-            errorEmail: {
-                formatoIncorrecto: false,
-                completo: false,
-            },
-            errorPass: {
-                completo: false
-            },
             serverError: false,
             cargando: false,
+            serverRequest: null,
         }
     }
 
@@ -39,45 +34,14 @@ class Login extends Component{
         this.redirectSiExisteSesion();
     }
 
-    iniciarSesion(){
-        
-        if(!this.validarCamposLogin()){
-            return
-        }
+    iniciarSesion(values){
 
         this.setState({cargando: true})
-
+        
         setTimeout(()=>{
             this.setState({cargando: false})
         }, 3000)
     
-    }
-
-    validarCamposLogin(){
-        if(this.state.email === "" || this.state.pass === ""){
-            
-            let errEmail = this.state.email === "" ? true : false;
-            let errPass = this.state.pass === "" ? true : false;
-
-            this.setState({ errorEmail: {completo: errEmail} })
-            this.setState({ errorPass: {completo: errPass} })
-
-            return false
-        }else{
-            let errEmail = this.state.email === "" ? true : false;
-            let errPass = this.state.pass === "" ? true : false;
-
-            this.setState({ errorEmail: {completo: errEmail} })
-            this.setState({ errorPass: {completo: errPass} })
-        }
-
-        if(!this.validarCorreo()){
-            this.setState({ errorEmail: {formatoIncorrecto: true} })
-            return false
-        }else{
-            this.setState({ errorEmail: {formatoIncorrecto: false} })
-            return true
-        }
     }
 
     guardarSesion(jwToken){
@@ -90,10 +54,28 @@ class Login extends Component{
         }
     }
 
-    validarCorreo(){
-        let regex = new RegExp(EMAIL_EXPRESSION);
+    renderField(data){
+        let { input, label, type, meta:{touched, error} } = data
+        let iconName = ''
 
-        return regex.test(this.state.email)
+        switch(type){
+            case 'password':
+                iconName = 'key'
+            break;
+            case 'email':
+                iconName = 'mail'
+            break;
+        }
+
+        return(
+            <Form.Field>
+                <label className='label-form'>{label}</label>
+                <Form.Input {...input} fluid icon= {iconName} iconPosition='left' placeholder = {label} type = {type} />
+                {touched &&
+                    (error && <Label basic color='red' pointing>{error}</Label>)
+                }
+            </Form.Field>
+        )
     }
 
     render(){
@@ -103,33 +85,22 @@ class Login extends Component{
                     {this.state.cargando && <Loader texto = 'Iniciando sesión...'/>}
                     <Grid textAlign = 'center' verticalAlign='middle' style={{height: '100vh'}}>
                         <Grid.Column style = {{maxWidth: '35em'}}>
-                                <Header as = 'h1'>Entrar</Header>
-                                <Form size='large'>
-                                    <Segment>
-                                        <Form.Field>
-                                            <Form.Input fluid icon='user' iconPosition='left' placeholder = 'Correo electrónico' type = 'email'
-                                                value = {this.state.email} onChange = {(e)=>{ this.setState({ email: e.target.value }) }}
-                                            />
-                                            {this.state.errorEmail.completo && <Label basic color='red' pointing>Email incompleto</Label>}
-                                            {this.state.errorEmail.formatoIncorrecto && <Label basic color = 'red' pointing>Email incorrecto</Label>}
-                                        </Form.Field>
-                                        <Form.Field>
-                                            <Form.Input fluid icon='lock' iconPosition = 'left' type = 'password' placeholder = 'contraseña' 
-                                                value = {this.state.pass} onChange = {(e)=>{ this.setState( {pass: e.target.value} ) }}
-                                            />
-                                            {this.state.errorPass.completo && <Label basic color='red' pointing>Falta la contraseña</Label>}
-                                        </Form.Field>
-                                        <h4>¿no tienes cuenta? <a href=''><Link to='/registrarse'>Registrate</Link></a></h4>
-                                        <Form.Field>
-                                            {this.state.serverError && <Message negative> <p>error</p> </Message>}
-                                        </Form.Field>
-                                        <Button fluid color = 'green'
-                                            onClick = {this.iniciarSesion}
-                                        >
-                                            Entrar
-                                        </Button>
-                                    </Segment>
-                                </Form>
+                            <Form size='large' onSubmit = {this.props.handleSubmit(this.iniciarSesion)}>
+                                <Segment>
+                                    <Header as = 'h1'>Entrar</Header>
+                                    <Field name = 'email' type = 'email' component = { this.renderField } label = 'Correo'/>
+                                    <Field name = 'password' type = 'password' component = { this.renderField } label = 'Contraseña'/>
+                                    <h4>¿no tienes cuenta? <a href=''><Link to='/registrarse'>Registrate</Link></a></h4>
+                                    {this.state.serverError && 
+                                    <Form.Field>
+                                        <Message negative> <p>{this.state.serverRequest.mensaje}</p> </Message>
+                                    </Form.Field>
+                                    }
+                                    <Button fluid color = 'green' type = 'submit'>
+                                        Entrar
+                                    </Button>
+                                </Segment>
+                            </Form>
                         </Grid.Column>
                     </Grid>
                 </Segment>
@@ -139,4 +110,15 @@ class Login extends Component{
 
 }
 
-export default withRouter(Login);
+const mapStateToProps = state =>{
+    return{
+        formState: state.form
+    }
+}
+
+Login = connect(mapStateToProps)(withRouter(Login))
+
+export default reduxForm({ 
+    form: 'login',
+    validate, 
+})(Login)
