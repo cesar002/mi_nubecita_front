@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { withRouter } from 'react-router-dom'
-import {Menu, Button, Header} from 'semantic-ui-react'
+import {Menu, Button} from 'semantic-ui-react'
 
 class NavBar extends Component{
     constructor(props){
@@ -11,7 +11,7 @@ class NavBar extends Component{
     render(){
         return(
             <React.Fragment>
-                <Menu attached = 'top' pointing size = 'large' inverted>
+                <Menu attached = 'top' pointing size = 'large' inverted fluid> 
                     <Menu.Item 
                         name = 'Mi Nubecita'
                         content = 'Mi Nubecita'

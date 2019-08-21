@@ -1,4 +1,4 @@
-import _ from 'lodash';
+
 import {ACTIVE_MENU_ELEMENT} from '../actions/menuActions'
 
 const initialState = {
@@ -10,7 +10,7 @@ const initialState = {
         { idMenu: 5, name: 'Papelera', active: false, route: '/mi_nube/papelera', icon: 'trash alternate' },
     ]
 }
-//_.filter(state.asistenteData.registro.mesas, (mesa)=>{return mesa.id !== action.payload.idMesa})
+
 export default (state = initialState, action) => {
     switch(action.type){
         case ACTIVE_MENU_ELEMENT:

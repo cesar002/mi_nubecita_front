@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 
 import AppView from '../components/AppViewTemplate'
 
-const wea = () =><p>archivos</p>
+const wea = () =><p>Fotos</p>
 
-export default class MiNube extends Component{
+export default class Fotos extends Component{
     constructor(props){
         super(props)
 

@@ -55,6 +55,9 @@ class Registrarse extends Component{
             case 'email':
                 iconName = 'mail'
             break;
+            default:
+                iconName = '';
+            break;
         }
 
         return(
