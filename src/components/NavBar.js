@@ -11,7 +11,7 @@ class NavBar extends Component{
     render(){
         return(
             <React.Fragment>
-                <Menu attached = 'top' pointing size = 'large' inverted fluid> 
+                <Menu attached = 'top' pointing size = 'large' inverted> 
                     <Menu.Item 
                         name = 'Mi Nubecita'
                         content = 'Mi Nubecita'

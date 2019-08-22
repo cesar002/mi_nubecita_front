@@ -6,7 +6,7 @@ class DetallesFile extends Component{
     constructor(props){
         super(props)
     }
-    
+
     //{overflowY: 'scroll', overflowX: 'hidden'}
     render(){
         return(

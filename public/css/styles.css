@@ -17,3 +17,39 @@ body{
     height: 100vh;
     width: 100%;
 }
+
+/* .file-item-button{
+    background: none;
+    border: none;
+}
+
+.file-item{
+    background: none;
+    border: none;
+}
+
+.file-item:hover{
+    
+} */
+
+
+.file-element{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.file-element:hover{
+    background: rgba(230,230,230, 2);
+}
+
+.file-element-check{
+    display: flex;
+    height: 0.5rem;
+}
+
+.file-element-body{
+    display: flex;
+    flex: 3;
+    width: 100%;
+}
