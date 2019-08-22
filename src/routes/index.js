@@ -4,6 +4,7 @@ import {BrowserRouter, Route} from 'react-router-dom'
 import DashBoard from '../views'
 import Login from '../views/login'
 import Registro from '../views/registrarse'
+import MiNube from '../views/miNube'
 
 const Router =() => (
     <BrowserRouter>
@@ -14,7 +15,10 @@ const Router =() => (
             <Route exact path = "/logout" />
             <Route exact path = "/verificar/:code" />
             <Route exact path = "/recuperar_password/:code" />
-            <Route exact path = "/mi_nube" />
+            <Route exact path = "/mi_nube" component = {MiNube} />
+            <Route exact path = "/mi_nube/recientes" />
+            <Route exact path = "/mi_nube/favoritos" />
+            <Route exact path = "/mi_nube/fotos" />
             <Route exact path = "/mi_nube/:id" />
             <Route exact path = "/mi_nube/papelera" />
             <Route exact path = "/mi_nube/compartir/:code" />

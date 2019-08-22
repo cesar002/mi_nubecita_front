@@ -1,8 +1,8 @@
-export const SET_MENU_ACTIVE = 'SET_MENU_ACTIVE'
+export const ACTIVE_MENU_ELEMENT = 'ACTIVE_MENU_ELEMENT'
 
-export const setMenuActive = (menuActive) => {
+export const activeMenuElement = (idMenu) => {
     return{
-        type: SET_MENU_ACTIVE,
-        payload: {menuActive},
+        type: ACTIVE_MENU_ELEMENT,
+        payload: {idMenu},
     }
 }

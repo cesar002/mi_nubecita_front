@@ -6,7 +6,7 @@ import {reduxForm, Field} from 'redux-form'
 
 import Loader from '../components/Loading';
 
-import { registroValidador as  validate} from '../utils/ReduxFormValidations'
+import { registroValidador } from '../utils/ReduxFormValidations'
 import LocalStorageService from '../services/LocalStorageService';
 import {SESSION_NAME} from '../utils/Constants'
 
@@ -113,5 +113,5 @@ Registrarse = connect(mapStateToProps)(withRouter(Registrarse))
 
 export default reduxForm({
     form: 'registro',
-    validate
+    validate: registroValidador,
 })(Registrarse)

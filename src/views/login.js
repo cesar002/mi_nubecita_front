@@ -7,7 +7,7 @@ import { reduxForm, Field } from 'redux-form'
 import Loader from '../components/Loading';
 
 import {SESSION_NAME} from '../utils/Constants'
-import { loginValidador as validate } from '../utils/ReduxFormValidations'
+import { loginValidador } from '../utils/ReduxFormValidations'
 
 import LocalStorageService from '../services/LocalStorageService';
 
@@ -120,5 +120,5 @@ Login = connect(mapStateToProps)(withRouter(Login))
 
 export default reduxForm({ 
     form: 'login',
-    validate, 
+    validate: loginValidador, 
 })(Login)
