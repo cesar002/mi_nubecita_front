@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
-import {Menu, Icon, Progress, Segment} from 'semantic-ui-react'
+import {Menu, Icon, Progress, Segment, Button} from 'semantic-ui-react'
 import {isMobile} from 'react-device-detect'
 
 import * as actions from '../redux/actions/menuActions';
@@ -53,6 +53,12 @@ class MenuNav extends Component{
                 <Segment basic>
                     {isMobile && this._renderMobileInterface()}
                     {!isMobile && this._renderDesktopInterface()}
+                </Segment>
+                <Segment basic>
+                    <Button color = 'teal' fluid>
+                        <Icon name = 'cloud upload'/>
+                        Subir archivo
+                    </Button>
                 </Segment>
                 <Segment basic>
                     <Progress percent = {70} size = 'tiny' color = 'teal'>

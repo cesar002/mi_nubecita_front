@@ -9,6 +9,7 @@ import Favoritos from '../views/favoritos'
 import Recientes from '../views/recientes'
 import Fotos from '../views/fotos'
 import Papelera from '../views/papelera'
+import NotFound from '../views/NotFound404'
 
 const Router =() => (
     <BrowserRouter>
@@ -26,6 +27,7 @@ const Router =() => (
             <Route exact path = "/mi_nube/:id" />
             <Route exact path = "/mi_nube/papelera" component = {Papelera} />
             <Route exact path = "/mi_nube/compartir/:code" />
+            {/* <Route exact path = "*"  component = {NotFound}/> */}
         </React.Fragment>
     </BrowserRouter>
 )

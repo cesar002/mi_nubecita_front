@@ -11,19 +11,29 @@ class DetallesFile extends Component{
     render(){
         return(
             <React.Fragment>
-                <Segment.Group piled >
+                <Segment.Group piled>
                     <Segment>
                         <Container fluid textAlign ='center'>
                             <Icon name = 'file' size = 'massive' color = 'grey'/>
                             <Header as = 'h3'>
                                 Archivito
-                                <Header.Subheader>36 mb - subido el 12/1/2009</Header.Subheader>
                             </Header>
                         </Container>
                     </Segment>
                     <Segment>
                         <Header as = 'h4' style={{color: '#1C1C1C'}}>Información:</Header>
-                        <Header as = 'h5'></Header>
+                        <Header as = 'h5'>
+                            Tipo de archivo:
+                            <Header.Subheader>archivo de texto</Header.Subheader>
+                        </Header>
+                        <Header as = 'h5'>
+                            Fecha de subida:
+                            <Header.Subheader>10 de enero de 2009</Header.Subheader>
+                        </Header>
+                        <Header as = 'h5'>
+                            Tamaño del archivo
+                            <Header.Subheader>10 MB</Header.Subheader>
+                        </Header>
                     </Segment>
                 </Segment.Group>
             </React.Fragment>
