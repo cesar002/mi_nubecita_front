@@ -39,8 +39,7 @@ export default class FileItem extends PureComponent{
     render(){
         return(
             <React.Fragment>
-
-                <div className = 'file-element' onMouseOver = {this._toggleCheckedIsVisible} onMouseOut = {this._toggleCheckedIsVisible} onClick = {this._toggleIsChecked}>
+                <div className = {this.state.isCheked? 'file-element-cheked' : 'file-element'} onMouseOver = {this._toggleCheckedIsVisible} onMouseOut = {this._toggleCheckedIsVisible} onClick = {this._toggleIsChecked}>
                     <div className = 'file-element-check'>
                         { (this.state.checkedIsVisible || this.state.isCheked) && 
                         <Checkbox checked = {this.state.isCheked} style = {{marginLeft: '0.5rem', marginTop: '0.5rem'}} />}

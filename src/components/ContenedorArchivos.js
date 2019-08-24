@@ -26,11 +26,22 @@ export default class ContenedorArchivos extends Component{
                 {nombre: 'documento 9',  tipo: 'document',  extencion: '.xlsx', fecha: '06 mayo 2009'},
                 {nombre: 'documento 10', tipo: 'acrobat',   extencion: '.pdf',  fecha: '11 diciembre 2009'},
                 {nombre: 'documento 11', tipo: 'image',     extencion: '.jpg',  fecha: '22 octubre 2009'},
-                {nombre: 'documento 12', tipo: 'image',     extencion: '.png',  fecha: '28 noviembre 2009'},
-                {nombre: 'documento 13', tipo: '3d',        extencion: '.bld',  fecha: '14 abril 2009'},
-            ]
+                // {nombre: 'documento 12', tipo: 'image',     extencion: '.png',  fecha: '28 noviembre 2009'},
+                // {nombre: 'documento 13', tipo: '3d',        extencion: '.bld',  fecha: '14 abril 2009'},
+                // {nombre: 'documento 14',  tipo: 'document',  extencion: '.xlsx', fecha: '06 mayo 2009'},
+                // {nombre: 'documento 15', tipo: 'acrobat',   extencion: '.pdf',  fecha: '11 diciembre 2009'},
+                // {nombre: 'documento 16', tipo: 'image',     extencion: '.jpg',  fecha: '22 octubre 2009'},
+                // {nombre: 'documento 17', tipo: 'image',     extencion: '.png',  fecha: '28 noviembre 2009'},
+                // {nombre: 'documento 18', tipo: '3d',        extencion: '.bld',  fecha: '14 abril 2009'},
+            ],
+            scrollEnabled: false,
         }
+    }
 
+    componentWillMount(){
+        if(this.state.archivos.length > 15){
+            this.setState({scrollEnabled: true})
+        }
     }
 
 
@@ -63,7 +74,7 @@ export default class ContenedorArchivos extends Component{
     render(){
         return(
             <React.Fragment>
-                <Container fluid>
+                <Container fluid style = {this.state.scrollEnabled? scrollStyle : {}}>
                     <Segment basic>
                         <ContextMenuTrigger id = 'fileContainer'>
                             <Grid>
@@ -77,3 +88,5 @@ export default class ContenedorArchivos extends Component{
         )
     }
 }
+
+const scrollStyle = {overflowY: 'scroll', overflowX: 'hidden', maxHeight: '40rem'}

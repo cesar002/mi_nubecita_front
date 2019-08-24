@@ -18,25 +18,18 @@ body{
     width: 100%;
 }
 
-/* .file-item-button{
-    background: none;
-    border: none;
-}
-
-.file-item{
-    background: none;
-    border: none;
-}
-
-.file-item:hover{
-    
-} */
-
 
 .file-element{
     display: flex;
     flex-direction: column;
     width: 100%;
+}
+
+.file-element-cheked{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    background: rgba(230,230,230, 2);
 }
 
 .file-element:hover{
