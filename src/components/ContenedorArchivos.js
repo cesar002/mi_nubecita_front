@@ -35,9 +35,9 @@ export default class ContenedorArchivos extends Component{
 
 
     _renderGridRow(arrayRoot){
-        return arrayRoot.map(array => {
+        return arrayRoot.map((array, key) => {
             return(
-                <Grid.Row columns = {NUMBER_ELEMENT_VIEW}>
+                <Grid.Row key={key} columns = {NUMBER_ELEMENT_VIEW}>
                     {this._renderGridElement(array)}
                 </Grid.Row>
             )
@@ -45,9 +45,9 @@ export default class ContenedorArchivos extends Component{
     }
 
     _renderGridElement(elements){
-        return elements.map(item => {
+        return elements.map((item, key) => {
             return(
-                <Grid.Column>
+                <Grid.Column key = {key}>
                     <FileItem />
                 </Grid.Column>
             )

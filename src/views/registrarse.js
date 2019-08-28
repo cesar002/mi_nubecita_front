@@ -9,6 +9,7 @@ import Loader from '../components/Loading';
 import { registroValidador } from '../utils/ReduxFormValidations'
 import LocalStorageService from '../services/LocalStorageService';
 import {SESSION_NAME} from '../utils/Constants'
+import ApiService from '../services/ApiService'
 
 class Registrarse extends Component{
 
@@ -21,8 +22,7 @@ class Registrarse extends Component{
 
         this.state = {
             cargando: false,
-            serverError: false,
-            serverRequest: null,
+            serverResponse: {},
         }
     }
 
@@ -38,10 +38,26 @@ class Registrarse extends Component{
 
     registrarse(values){
         this.setState({cargando: true})
-        
-        setTimeout(()=>{
+
+        ApiService.registrarse(values)
+        .then(response =>{
+            this.setState({serverResponse: response})
             this.setState({cargando: false})
-        }, 3000)
+
+            if(response.status === 1){
+                this.props.reset()
+            }
+        })
+        .catch(error => {
+            this.setState({serverResponse: error})
+            this.setState({cargando: false})
+        })
+    }
+
+    _renderMensajesError(){
+        return this.state.serverResponse.errors.map((item, key) =>
+            <Message negative key = {key}> <p>{item}</p> </Message>
+        )
     }
 
     renderField(data){
@@ -84,14 +100,29 @@ class Registrarse extends Component{
                                     <Header as = 'h1'>Registrarse</Header>
                                     <Field name = 'email' type = 'email' component = { this.renderField } label = 'Correo electrónico' />
                                     <Field name = 'password' type = 'password' component = { this.renderField } label = 'Contraseña' />
-                                    <Field name = 'rePassword' type = 'password' component = { this.renderField } label = 'Repetir contraseña' />
+                                    <Field name = 'password_confirmation' type = 'password' component = { this.renderField } label = 'Repetir contraseña' />
                                     <Form.Field>
                                         <h4>¿Ya tienes cuenta? <a href=''><Link to = '/login'>Inicia sesión</Link></a> </h4>
                                     </Form.Field>
-                                    {this.state.serverError && 
-                                    <Form.Field>
-                                        <Message negative> <p>{this.state.serverRequest.mensaje}</p> </Message>
-                                    </Form.Field>
+                                    {
+                                        this.state.serverResponse.status === 1 &&
+                                        <Form.Field>
+                                            <Message positive>
+                                                <Message.Header>Registro éxitoso</Message.Header>
+                                                <p>{this.state.serverResponse.mensaje}</p> 
+                                            </Message>
+                                        </Form.Field>
+                                    }
+                                    {(this.state.serverResponse.status === 2 && 
+                                        <Form.Field>
+                                            {this._renderMensajesError()}
+                                        </Form.Field>
+                                    )||(
+                                        (this.state.serverResponse.status === 0 || this.state.serverResponse.status === -1) &&
+                                        <Form.Field>
+                                            <Message negative> <p>{this.state.serverResponse.mensaje}</p> </Message>
+                                        </Form.Field>
+                                    )   
                                     }
                                     <Button fluid color = 'green' type = 'submit'>
                                         Registrarse

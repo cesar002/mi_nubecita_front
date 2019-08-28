@@ -32,10 +32,10 @@ export const registroValidador = values =>{
         errors.password = 'Falta la contraseña';
     }
 
-    if(!values.rePassword){
-        errors.rePassword = 'Confirme su contraseña'
-    }else if(values.rePassword !== values.password){
-        errors.rePassword = 'Las contraseñas no coinciden'
+    if(!values.password_confirmation){
+        errors.password_confirmation = 'Confirme su contraseña'
+    }else if(values.password_confirmation !== values.password){
+        errors.password_confirmation = 'Las contraseñas no coinciden'
     }
 
     return errors

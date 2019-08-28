@@ -25,8 +25,8 @@ export default class ContextMenuArchivos extends Component{
     }
 
     _renderMenuItems(){
-        return this.state.menuData.map(item =>
-            <MenuItem onClick = {()=>{}}>
+        return this.state.menuData.map((item, key) =>
+            <MenuItem key={key} onClick = {()=>{}}>
                 <Menu.Item onClick={()=>{}}>
                     {item.name}
                     <Icon name = {item.icon} />
@@ -40,7 +40,7 @@ export default class ContextMenuArchivos extends Component{
         return(
             <React.Fragment>
                 <ContextMenu id = {this.props.idContextTrigger}>
-                    <Menu inverted vertical>
+                    <Menu inverted vertical style = {{zIndex: '100'}}>
                         {this._renderMenuItems()}
                     </Menu>
                 </ContextMenu>

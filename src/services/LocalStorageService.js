@@ -1,3 +1,5 @@
+import {SESSION_NAME} from '../utils/Constants'
+
 const LocalStorageService = (()=>{
     return {
         setItem,
@@ -5,9 +7,16 @@ const LocalStorageService = (()=>{
         existItem,
         removeItem,
         clear,
+        getSessionToken,
+        setSessionToken,
+        deleteSessionToken,
+        existSessionToken,
     }
 
     function setItem(itemName, item){
+        if(existItem(itemName)){
+            return
+        }
         window.localStorage.setItem(itemName, item)
     }
 
@@ -20,11 +29,30 @@ const LocalStorageService = (()=>{
     }
 
     function removeItem(itemName){
+        if(!existItem(itemName)){
+            return
+        }
         window.localStorage.removeItem(itemName)
     }
 
     function clear(){
         window.localStorage.clear()
+    }
+
+    function getSessionToken(){
+        return existItem(SESSION_NAME)? getItem(SESSION_NAME) : 'xxxxxxxxx';
+    }
+
+    function setSessionToken(token){
+        setItem(SESSION_NAME, token)
+    }
+
+    function deleteSessionToken(){
+        removeItem(SESSION_NAME);
+    }
+
+    function existSessionToken(){
+        return existItem(SESSION_NAME)
     }
 
 })()

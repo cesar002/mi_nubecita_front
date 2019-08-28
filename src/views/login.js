@@ -10,6 +10,7 @@ import {SESSION_NAME} from '../utils/Constants'
 import { loginValidador } from '../utils/ReduxFormValidations'
 
 import LocalStorageService from '../services/LocalStorageService';
+import ApiService from '../services/ApiService';
 
 
 
@@ -24,9 +25,8 @@ class Login extends Component{
         this.redirectSiExisteSesion = this.redirectSiExisteSesion.bind(this)
 
         this.state = {
-            serverError: false,
             cargando: false,
-            serverRequest: null,
+            serverResponse: {},
         }
     }
 
@@ -35,12 +35,18 @@ class Login extends Component{
     }
 
     iniciarSesion(values){
-
         this.setState({cargando: true})
-        
-        setTimeout(()=>{
+
+        ApiService.login(values)
+        .then(res =>{
             this.setState({cargando: false})
-        }, 3000)
+            this.guardarSesion(res.access_token)
+            this.props.history.push("/mi_nube");
+        })
+        .catch(err =>{
+            this.setState({serverResponse: err})
+            this.setState({cargando: false})
+        });
     
     }
 
@@ -94,9 +100,9 @@ class Login extends Component{
                                     <Field name = 'email' type = 'email' component = { this.renderField } label = 'Correo'/>
                                     <Field name = 'password' type = 'password' component = { this.renderField } label = 'Contraseña'/>
                                     <h4>¿no tienes cuenta? <a href=''><Link to='/registrarse'>Registrate</Link></a></h4>
-                                    {this.state.serverError && 
+                                    {(this.state.serverResponse.status === 2 || this.state.serverResponse.status === 0 || this.state.serverResponse.status === -1) && 
                                     <Form.Field>
-                                        <Message negative> <p>{this.state.serverRequest.mensaje}</p> </Message>
+                                        <Message negative> <p>{this.state.serverResponse.mensaje}</p> </Message>
                                     </Form.Field>
                                     }
                                     <Button fluid color = 'green' type = 'submit'>

@@ -1,18 +1,27 @@
 import React, { Component } from 'react'
 import {Grid} from 'semantic-ui-react'
 import {isMobile} from 'react-device-detect'
+import {withRouter} from 'react-router-dom'
 
 import NavBar from './NavBar'
 import Menu from './MenuNav'
 import DetallesArchivo from './DetallesFile'
 
-export default class AppViewTemplate extends Component{
+import LocalStorageService from '../services/LocalStorageService'
+
+class AppViewTemplate extends Component{
     constructor(props){
         super(props)
 
         this._renderDesktopInterface = this._renderDesktopInterface.bind(this)
         this._renderMobileInterface = this._renderMobileInterface.bind(this)
 
+    }
+
+    componentWillMount(){
+        if(!LocalStorageService.existSessionToken()){
+            this.props.history.push("/");
+        }
     }
 
 
@@ -59,3 +68,7 @@ export default class AppViewTemplate extends Component{
         )
     }
 }
+
+
+
+export default withRouter(AppViewTemplate)
