@@ -13,6 +13,9 @@ export default class ContenedorArchivos extends Component{
     constructor(props){
         super(props)
 
+        this._filesSelections = this._filesSelections.bind(this)
+        this.fileInputReference = React.createRef()
+
         this.state = {
             archivos:[
                 {nombre: 'documento 1',  tipo: 'document',  extencion: '.docx', fecha: '10 junio 2009'},
@@ -27,9 +30,11 @@ export default class ContenedorArchivos extends Component{
                 {nombre: 'documento 10', tipo: 'acrobat',   extencion: '.pdf',  fecha: '11 diciembre 2009'},
                 {nombre: 'documento 11', tipo: 'image',     extencion: '.jpg',  fecha: '22 octubre 2009'},
             ],
+            files: null,
             scrollEnabled: false,
             isEmpty: true,
         }
+
     }
 
     componentWillMount(){
@@ -64,6 +69,12 @@ export default class ContenedorArchivos extends Component{
         return this._renderGridRow(datos)
     }
 
+    _filesSelections(e){
+        let files = e.target.files
+        this.setState({files: files})
+        console.log(this.state.files)
+    }
+
     _fileContainer(){
         return(
             <ContextMenuTrigger id = 'fileContainer'>
@@ -76,15 +87,24 @@ export default class ContenedorArchivos extends Component{
 
     _fileContainerWithoutFiles(){
         return(
-            <Segment placeholder basic>
-                <Header icon>
-                    <Icon name = 'file alternate outline' />
-                    Aun no hay archivos para mostrar, sube tu primer archivo
-                </Header>
-                <Button primary>
-                    Subir archivo
-                </Button>
-            </Segment>
+            <React.Fragment>
+                <Segment placeholder basic>
+                    <Header icon>
+                        <Icon name = 'file alternate outline' />
+                        <p>Aun no hay archivos para mostrar</p>
+                    </Header>
+                    <Button primary size ='large' onClick = {() => this.fileInputReference.current.click()}>
+                        Subir archivo
+                    </Button>
+                </Segment>
+                <input 
+                    ref = {this.fileInputReference}
+                    type = 'file'
+                    hidden
+                    multiple
+                    onChange = {this._filesSelections}
+                />
+            </React.Fragment>
         )
     }
 

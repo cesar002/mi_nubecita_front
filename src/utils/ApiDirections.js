@@ -1,5 +1,5 @@
-// export const HOST_NAME = 'http://mi_nubecita_backend.oo';
-export const HOST_NAME = 'http://mi_nubecita_api.oo';
+export const HOST_NAME = 'http://mi_nubecita_backend.oo';
+// export const HOST_NAME = 'http://mi_nubecita_api.oo';
 
 export const REGISTRARSE = `${HOST_NAME}/api/auth/registrarse`;
 export const LOGIN = `${HOST_NAME}/api/auth/login`;

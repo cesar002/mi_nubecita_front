@@ -10,10 +10,13 @@ class MenuNav extends Component{
     constructor(props){
         super(props)
 
+        this.fileInputRef = React.createRef()
         this.renderMenuElements = this.renderMenuElements.bind(this)
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this)
 
     }
+
+    
 
     handleMenuItemClick(menuItem){
         this.props.activeMenuElement(menuItem.idMenu)
@@ -55,10 +58,13 @@ class MenuNav extends Component{
                     {!isMobile && this._renderDesktopInterface()}
                 </Segment>
                 <Segment basic>
-                    <Button color = 'teal' fluid>
-                        <Icon name = 'cloud upload'/>
-                        Subir archivo
-                    </Button>
+                    <Button color = 'teal' fluid labelPosition = 'left' icon = 'cloud upload' content = 'Subir archivo' onClick = {()=> this.fileInputRef.current.click()} />
+                    <input 
+                        ref = {this.fileInputRef}
+                        type = 'file'
+                        hidden
+                        multiple
+                    />
                 </Segment>
                 <Segment basic>
                     <Progress percent = {70} size = 'tiny' color = 'teal'>
