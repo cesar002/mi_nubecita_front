@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Grid, Container, Segment} from 'semantic-ui-react';
+import {Grid, Container, Segment, Header, Icon, Button} from 'semantic-ui-react';
 import {ContextMenuTrigger} from 'react-contextmenu'
 import _ from 'lodash'
 
@@ -26,15 +26,9 @@ export default class ContenedorArchivos extends Component{
                 {nombre: 'documento 9',  tipo: 'document',  extencion: '.xlsx', fecha: '06 mayo 2009'},
                 {nombre: 'documento 10', tipo: 'acrobat',   extencion: '.pdf',  fecha: '11 diciembre 2009'},
                 {nombre: 'documento 11', tipo: 'image',     extencion: '.jpg',  fecha: '22 octubre 2009'},
-                // {nombre: 'documento 12', tipo: 'image',     extencion: '.png',  fecha: '28 noviembre 2009'},
-                // {nombre: 'documento 13', tipo: '3d',        extencion: '.bld',  fecha: '14 abril 2009'},
-                // {nombre: 'documento 14',  tipo: 'document',  extencion: '.xlsx', fecha: '06 mayo 2009'},
-                // {nombre: 'documento 15', tipo: 'acrobat',   extencion: '.pdf',  fecha: '11 diciembre 2009'},
-                // {nombre: 'documento 16', tipo: 'image',     extencion: '.jpg',  fecha: '22 octubre 2009'},
-                // {nombre: 'documento 17', tipo: 'image',     extencion: '.png',  fecha: '28 noviembre 2009'},
-                // {nombre: 'documento 18', tipo: '3d',        extencion: '.bld',  fecha: '14 abril 2009'},
             ],
             scrollEnabled: false,
+            isEmpty: true,
         }
     }
 
@@ -70,17 +64,38 @@ export default class ContenedorArchivos extends Component{
         return this._renderGridRow(datos)
     }
 
+    _fileContainer(){
+        return(
+            <ContextMenuTrigger id = 'fileContainer'>
+                <Grid>
+                    {this._renderFiles()}
+                </Grid>
+            </ContextMenuTrigger>
+        )
+    }
+
+    _fileContainerWithoutFiles(){
+        return(
+            <Segment placeholder basic>
+                <Header icon>
+                    <Icon name = 'file alternate outline' />
+                    Aun no hay archivos para mostrar, sube tu primer archivo
+                </Header>
+                <Button primary>
+                    Subir archivo
+                </Button>
+            </Segment>
+        )
+    }
+
 
     render(){
         return(
             <React.Fragment>
                 <Container fluid style = {this.state.scrollEnabled? scrollStyle : {}}>
                     <Segment basic>
-                        <ContextMenuTrigger id = 'fileContainer'>
-                            <Grid>
-                                {this._renderFiles()}
-                            </Grid>
-                        </ContextMenuTrigger>
+                        {this.state.isEmpty && this._fileContainerWithoutFiles()}
+                        {!this.state.isEmpty && this._fileContainer()}
                     </Segment>
                 </Container>
                 <MenuContextual idContextTrigger = 'fileContainer' />

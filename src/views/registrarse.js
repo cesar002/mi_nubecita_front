@@ -38,7 +38,6 @@ class Registrarse extends Component{
 
     registrarse(values){
         this.setState({cargando: true})
-
         ApiService.registrarse(values)
         .then(response =>{
             this.setState({serverResponse: response})

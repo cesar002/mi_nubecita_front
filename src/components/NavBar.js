@@ -3,23 +3,30 @@ import { withRouter } from 'react-router-dom'
 import {Menu, Button} from 'semantic-ui-react'
 import {connect} from 'react-redux'
 
+import Loader from './Loading'
+
 import ApiService from '../services/ApiService'
 import LocalStorageService from '../services/LocalStorageService'
+
+import * as actions from '../redux/actions/logoutActions'
 
 class NavBar extends Component{
     constructor(props){
         super(props)
+
+        this.logout = this.logout.bind(this)
     }
 
     logout(){
+        this.props.setLogoutAction(true)
+
         ApiService.logout()
         .then(res =>{
+            this.props.setLogoutAction(false)
             LocalStorageService.deleteSessionToken()
             this.props.history.push('/')
         })
-        .catch(err =>{
-
-        })
+        .catch(err =>{ this.props.setLogoutAction(false)})
     }
 
 
@@ -36,7 +43,7 @@ class NavBar extends Component{
                             <h4>{this.props.userEmail}</h4>
                         </Menu.Item>
                         <Menu.Item>
-                            <Button secondary onClick = {()=>{}}>
+                            <Button secondary onClick = {this.logout}>
                                 Cerrar
                             </Button>
                         </Menu.Item>
@@ -50,8 +57,16 @@ class NavBar extends Component{
 
 const mapStateToProps = state =>{
     return{
-        userEmail: state.emailUser.email_user
+        userEmail: state.emailUser.email_user,
     }
 }
 
-export default connect(mapStateToProps)(withRouter(NavBar))
+const mapDispatchToProps = dispatch =>{
+    return{
+        setLogoutAction(active){
+            dispatch(actions.logoutRequestActive(active));
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NavBar))

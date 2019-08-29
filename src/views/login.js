@@ -40,6 +40,10 @@ class Login extends Component{
         ApiService.login(values)
         .then(res =>{
             this.setState({cargando: false})
+            if(res.status !== 1){
+                this.setState({serverResponse: res})
+                return
+            }
             this.guardarSesion(res.access_token)
             this.props.history.push("/mi_nube");
         })

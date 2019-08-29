@@ -47,7 +47,7 @@ export default (function(){
 
     function logout(){
         return new Promise((resolve, reject) =>{
-            axios.post(LOGOUT,{
+            axios.post(LOGOUT,{},{
                 headers:{
                     authorization: `Bearer ${LocalStorageService.getSessionToken()}`
                 }
@@ -67,7 +67,7 @@ export default (function(){
 
     function verificarCuenta(code){
         return new Promise((resolve, reject) => {
-            axios.post(`${VERIFICAR_CORREO}/${code}`)
+            axios.get(`${VERIFICAR_CORREO}/${code}`)
             .then(response =>{
                 resolve(response.data);
             })
