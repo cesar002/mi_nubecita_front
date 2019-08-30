@@ -7,6 +7,7 @@ import {NUMBER_ELEMENT_VIEW} from '../utils/Constants'
 
 import FileItem from '../components/FileItem'
 import MenuContextual from '../components/ContextMenuArchivos'
+import ApiService from '../services/ApiService';
 
 export default class ContenedorArchivos extends Component{
 
@@ -71,8 +72,16 @@ export default class ContenedorArchivos extends Component{
 
     _filesSelections(e){
         let files = e.target.files
-        this.setState({files: files})
-        console.log(this.state.files)
+        if(!files){
+            return;
+        }
+        ApiService.uploadFiles(files)
+        .then(resp =>{
+
+        })
+        .catch(err =>{
+
+        })
     }
 
     _fileContainer(){

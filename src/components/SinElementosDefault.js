@@ -3,7 +3,15 @@ import {Segment, Header, Icon} from 'semantic-ui-react'
 
 const getNameIcon = (nameIcon) => {
     switch(nameIcon){
-
+        case 'favoritos':
+            return 'star outline';
+        case 'recientes':
+            return 'time'
+        case 'fotos':
+            return 'picture'
+        case 'papelera':
+            return '';
+        default: return '';
     }
 }
 
