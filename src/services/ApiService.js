@@ -103,10 +103,12 @@ export default (function(){
     }
 
     function uploadFiles(files){
+        debugger;
         return new Promise((resolve, reject) => {
             axios.post(UPLOAD_FILES, files, {
                 headers:{
-                    authorization: `Bearer ${LocalStorageService.getSessionToken()}`
+                    'content-type': 'multipart/form-data',
+                    authorization: `Bearer ${LocalStorageService.getSessionToken()}`,
                 }
             })
             .then(response =>{

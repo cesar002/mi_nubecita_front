@@ -14,7 +14,7 @@ export default class ContenedorArchivos extends Component{
     constructor(props){
         super(props)
 
-        this._filesSelections = this._filesSelections.bind(this)
+        this._uploadFiles = this._uploadFiles.bind(this)
         this.fileInputReference = React.createRef()
 
         this.state = {
@@ -70,17 +70,22 @@ export default class ContenedorArchivos extends Component{
         return this._renderGridRow(datos)
     }
 
-    _filesSelections(e){
-        let files = e.target.files
-        if(!files){
+    _uploadFiles(e){
+        debugger;
+        let _files = e.target.files
+        if(!_files){
             return;
         }
-        ApiService.uploadFiles(files)
-        .then(resp =>{
 
+        const data = new FormData();
+        data.append('files', _files)
+
+        ApiService.uploadFiles(data)
+        .then(resp =>{
+            console.log(resp)
         })
         .catch(err =>{
-
+            console.log(err)
         })
     }
 
@@ -102,17 +107,17 @@ export default class ContenedorArchivos extends Component{
                         <Icon name = 'file alternate outline' />
                         <p>Aun no hay archivos para mostrar</p>
                     </Header>
-                    <Button primary size ='large' onClick = {() => this.fileInputReference.current.click()}>
-                        Subir archivo
-                    </Button>
+                        <Button primary size ='large' onClick = {() => this.fileInputReference.current.click()}>
+                            Subir archivo
+                        </Button>
+                        <input 
+                            ref = {this.fileInputReference}
+                            type = 'file'
+                            hidden
+                            multiple
+                            onChange = {this._uploadFiles}
+                        />
                 </Segment>
-                <input 
-                    ref = {this.fileInputReference}
-                    type = 'file'
-                    hidden
-                    multiple
-                    onChange = {this._filesSelections}
-                />
             </React.Fragment>
         )
     }
