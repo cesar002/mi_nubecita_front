@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux'
 import {Grid, Container, Segment, Header, Icon, Button} from 'semantic-ui-react';
 import {ContextMenuTrigger} from 'react-contextmenu'
 import _ from 'lodash'
@@ -9,14 +10,13 @@ import FileItem from '../components/FileItem'
 import MenuContextual from '../components/ContextMenuArchivos'
 import ApiService from '../services/ApiService';
 
-export default class ContenedorArchivos extends Component{
+class ContenedorArchivos extends Component{
 
     constructor(props){
         super(props)
 
-        this._uploadFile = this._uploadFile.bind(this)
-        this.fileInputReference = React.createRef()
         this._uploadFiles = this._uploadFiles.bind(this)
+        this.fileInputReference = React.createRef()
 
         this.state = {
             archivos:[
@@ -35,25 +35,17 @@ export default class ContenedorArchivos extends Component{
             files: null,
             scrollEnabled: false,
             isEmpty: true,
+            uploadFiles: false,
         }
 
     }
 
     componentWillMount(){
+        this.props.userFiles.files.length === 0? this.setState({isEmpty: true}) : this.setState({isEmpty: false})
         if(this.state.archivos.length > 15){
             this.setState({scrollEnabled: true})
         }
-
-        ApiService.totalEnUso()
-        .then(res =>{
-            console.log(res)
-        })
-        .catch(err =>{
-            console.log(err)
-        })
     }
-
-
     _renderGridRow(arrayRoot){
         return arrayRoot.map((array, key) => {
             return(
@@ -68,26 +60,23 @@ export default class ContenedorArchivos extends Component{
         return elements.map((item, key) => {
             return(
                 <Grid.Column key = {key}>
-                    <FileItem />
+                    <FileItem nombreArchivo = {item.nombre} />
                 </Grid.Column>
             )
         })
     }
 
     _renderFiles(){
-        let datos = _.chunk(this.state.archivos, NUMBER_ELEMENT_VIEW)
+        let datos = _.chunk(this.props.userFiles.files, NUMBER_ELEMENT_VIEW)
         return this._renderGridRow(datos)
     }
-
     _uploadFiles(e){
-
-    }
-
-    _uploadFile(e){
         let files = e.target.files
         if(!files){
             return
         }
+
+        this.setState({uploadFiles: true})
 
         let data = new FormData();
 
@@ -97,10 +86,10 @@ export default class ContenedorArchivos extends Component{
         
         ApiService.uploadFiles(data)
         .then(resp =>{
-            console.log(resp)
+            this.setState({uploadFiles: false})
         })
         .catch(err =>{
-            console.log(err)
+            this.setState({uploadFiles: false})
         })
     }
 
@@ -122,7 +111,7 @@ export default class ContenedorArchivos extends Component{
                         <Icon name = 'file alternate outline' />
                         <p>Aun no hay archivos para mostrar</p>
                     </Header>
-                        <Button primary size ='large' onClick = {() => this.fileInputReference.current.click()}>
+                        <Button primary size ='large' loading = {this.state.uploadFiles} onClick = {() => this.fileInputReference.current.click()}>
                             Subir archivo
                         </Button>
                         <input 
@@ -130,7 +119,7 @@ export default class ContenedorArchivos extends Component{
                             type = 'file'
                             hidden
                             multiple
-                            onChange = {this._uploadFile}
+                            onChange = {this._uploadFiles}
                         />
                 </Segment>
             </React.Fragment>
@@ -154,3 +143,11 @@ export default class ContenedorArchivos extends Component{
 }
 
 const scrollStyle = {overflowY: 'scroll', overflowX: 'hidden', maxHeight: '40rem'}
+
+const mapStateToProps = state =>{
+    return{
+        userFiles: state.userFiles
+    }
+}
+
+export default connect(mapStateToProps)(ContenedorArchivos)

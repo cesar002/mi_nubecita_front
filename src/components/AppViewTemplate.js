@@ -9,7 +9,8 @@ import Menu from './MenuNav'
 import DetallesArchivo from './DetallesFile'
 import Loader from './Loading';
 
-import * as actions from '../redux/actions/emailUserAction';
+import * as actions from '../redux/actions/userDataAction';
+import * as fileActions from '../redux/actions/userDataFilesActions'
 import ApiService from '../services/ApiService';
 import LocalStorageService from '../services/LocalStorageService';
 
@@ -33,15 +34,18 @@ class AppViewTemplate extends Component{
 
     _verifySession(){
         if(LocalStorageService.existSessionToken()){
-            if(!this.props.userEmail){
+            if(!this.props.userData){
                 this.setState({consultando: true})
-                ApiService.getMe().then(resp => {
+                Promise.all([ApiService.getMe(), ApiService.getFiles()])
+                .then(values => {
+                    this.props.setUserData(values[0])
+                    this.props.setFiles(values[1])
+                    // console.log(values)
                     this.setState({consultando: false})
-                    this.props.setEmailUser(resp.me)
-                }).catch(err =>{
-                    LocalStorageService.deleteSessionToken();
-                    this.props.history.push('/');
-                });
+                })
+                .catch(error =>{    
+                    console.log(error)
+                })
             }
         }else{
             this.props.history.push('/');
@@ -100,15 +104,17 @@ class AppViewTemplate extends Component{
 
 const mapStateTuProps = state =>{
     return{
-        userEmail: state.emailUser.email_user,
         logoutActive: state.logout.logoutActive,
     }
 }
 
 const mapDispatchToProps = dispatch =>{
     return{
-        setEmailUser(email){
-            dispatch(actions.setEmailUser(email));
+        setUserData(data){
+            dispatch(actions.setUserData(data));
+        },
+        setFiles(files){
+            dispatch(fileActions.setFilesUser(files))
         }
     }
 }

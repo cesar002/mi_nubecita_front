@@ -5,6 +5,7 @@ import {Menu, Icon, Progress, Segment, Button} from 'semantic-ui-react'
 import {isMobile} from 'react-device-detect'
 
 import * as actions from '../redux/actions/menuActions';
+import FormatBytes from '../utils/FormatBytes'
 
 class MenuNav extends Component{
     constructor(props){
@@ -24,7 +25,7 @@ class MenuNav extends Component{
     }
 
     renderMenuElements(){
-        return this.props.menu.menuData.map( menuItem => {
+        return this.props.menu.map( menuItem => {
             return(
                 <Menu.Item key = {menuItem.idMenu} name = {menuItem.name} active = {menuItem.active} onClick = {()=>{ this.handleMenuItemClick(menuItem) }}>
                     <Icon name = {menuItem.icon} />
@@ -50,6 +51,11 @@ class MenuNav extends Component{
         )
     }
 
+    _convertPorcentaje(){
+        let result = (this.props.userData.enUso * 100)/(this.props.userData.limiteAlmacenaje.limite * 1000)
+        return Math.round(result)
+    }
+
     render(){
         return(
             <React.Fragment>
@@ -67,9 +73,11 @@ class MenuNav extends Component{
                     />
                 </Segment>
                 <Segment basic>
-                    <Progress percent = {70} size = 'tiny' color = 'teal'>
-                        32 MB de 50 MB usado
+                    {this.props.userData && 
+                    <Progress percent = {this._convertPorcentaje()} size = 'tiny' color = 'teal'>
+                        {FormatBytes(this.props.userData.enUso)} de {this.props.userData.limiteAlmacenaje.limite/1000000} GB usados
                     </Progress>
+                    }
                 </Segment>
             </React.Fragment>
         )
@@ -80,6 +88,7 @@ class MenuNav extends Component{
 const mapStateToProps = state => {
     return{
         menu: state.menuData,
+        userData: state.userData.userData,
     }
 }
 

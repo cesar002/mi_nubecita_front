@@ -12,9 +12,9 @@ const composeEnhancers = composeWithDevTools({
 
 
 const configureStore = function(){
-    let store = createStore(state, composeEnhancers(
-        applyMiddleware(thunk)
-    ));
+    let store = createStore(state,
+        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    );
     return store
 }
 

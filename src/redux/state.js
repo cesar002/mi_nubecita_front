@@ -2,12 +2,14 @@ import {combineReducers} from 'redux'
 import { reducer as formReducer } from 'redux-form'
 
 import MenuReducers from './reducers/menuReducer'
-import EmailUserReducers from './reducers/emailUserReducer';
+import UserDataReducers from './reducers/userDataReducer';
+import UserFilesReducers from './reducers/userDataFilesReducer'
 import LogoutReducers from './reducers/logoutReducers'
 
 export default combineReducers({
     menuData: MenuReducers,
-    emailUser: EmailUserReducers,
+    userData: UserDataReducers,
     logout: LogoutReducers,
+    userFiles: UserFilesReducers,
     form: formReducer,
 })

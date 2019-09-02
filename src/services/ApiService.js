@@ -1,6 +1,10 @@
 import axios from 'axios';
 
-import {REGISTRARSE, LOGIN, VERIFICAR_CORREO, GET_ME_EMAIL, LOGOUT, UPLOAD_FILES, IN_USE} from '../utils/ApiDirections'
+import {
+    REGISTRARSE, LOGIN, 
+    VERIFICAR_CORREO, GET_ME_EMAIL, LOGOUT, 
+    UPLOAD_FILES, FILES
+} from '../utils/ApiDirections'
 
 import LocalStorageService from './LocalStorageService'
 
@@ -12,7 +16,7 @@ export default (function(){
         verificarCuenta,
         getMe,
         uploadFiles,
-        totalEnUso,
+        getFiles,
     }
 
     function registrarse(data){
@@ -124,20 +128,20 @@ export default (function(){
         });
     }
 
-    function totalEnUso(){
+    function getFiles(){
         return new Promise((resolve, reject) =>{
-            axios.get(IN_USE,{
+            axios.get(FILES, {
                 headers:{
                     authorization: `Bearer ${LocalStorageService.getSessionToken()}`,
                 }
             })
-            .then(response => {
-                resolve(response.data);
+            .then(response =>{
+                resolve(response.data)
             })
             .catch(error =>{
-                resolve(error);
+                resolve(error)
             })
-        });
+        })
     }
 
 })()

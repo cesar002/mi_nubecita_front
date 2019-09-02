@@ -50,7 +50,7 @@ export const removeFile = (idFile) =>{
 
 export const removeFavoriteFile = (idFile) =>{
     return {
-        type: REMOVE_FILE_FAVORITE,
+        type: REMOVE_FAVORITE_FILE,
         payload: { idFile } 
     }
 }

@@ -1,46 +1,17 @@
-import {
-    SET_FILES_USER, SET_FAVORITE_FILES_USER, SET_RECENT_FILES,
-    ADD_FAVORITE_FILE, ADD_FILE,
-    REMOVE_FAVORITE_FILE, REMOVE_FILE
-} from '../actions/userDataActions'
+import {SET_EMAIL_USER, DELETE_EMAIL_USER} from '../actions/userDataAction';
 
-const initialState = {
-    files: [],
-    favoriteFiles: [],
-    recentFiles: [],
-    pictures: [],
-    deleteFiles: []
-}
-
-export default (state = initialState, action) => {
+export default (state ={}, action) => {
     switch(action.type){
-        case SET_FILES_USER:
+        case SET_EMAIL_USER:
             return{
-
+                ...state,
+                userData: action.payload.userData
             }
-        case SET_FAVORITE_FILES_USER:
+        case DELETE_EMAIL_USER:
             return{
-
+                ...state,
+                userData: {}
             }
-        case SET_RECENT_FILES:
-            return{
-
-            }
-        case ADD_FILE:
-            return{
-
-            }
-        case ADD_FAVORITE_FILE:
-            return{
-
-            }
-        case REMOVE_FILE:
-            return{
-
-            }
-        case REMOVE_FAVORITE_FILE:{
-
-        }
         default: return state;
     }
 }

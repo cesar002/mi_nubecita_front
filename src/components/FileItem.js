@@ -49,7 +49,7 @@ export default class FileItem extends PureComponent{
                         <Segment basic>
                             <Header icon>
                                 <FileIcon extension = 'pdf' {...defaultStyles.pdf} size = {55} />
-                                <p>Documento</p>
+                                <p style={{fontSize: '10px'}}>{this.props.nombreArchivo}</p>
                             </Header>
                             <Segment.Inline>
                                 <Header as = 'h5' color = 'grey'>
