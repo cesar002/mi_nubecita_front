@@ -14,8 +14,9 @@ export default class ContenedorArchivos extends Component{
     constructor(props){
         super(props)
 
-        this._uploadFiles = this._uploadFiles.bind(this)
+        this._uploadFile = this._uploadFile.bind(this)
         this.fileInputReference = React.createRef()
+        this._uploadFiles = this._uploadFiles.bind(this)
 
         this.state = {
             archivos:[
@@ -42,6 +43,14 @@ export default class ContenedorArchivos extends Component{
         if(this.state.archivos.length > 15){
             this.setState({scrollEnabled: true})
         }
+
+        ApiService.totalEnUso()
+        .then(res =>{
+            console.log(res)
+        })
+        .catch(err =>{
+            console.log(err)
+        })
     }
 
 
@@ -71,15 +80,21 @@ export default class ContenedorArchivos extends Component{
     }
 
     _uploadFiles(e){
-        debugger;
-        let _files = e.target.files
-        if(!_files){
-            return;
+
+    }
+
+    _uploadFile(e){
+        let files = e.target.files
+        if(!files){
+            return
         }
 
-        const data = new FormData();
-        data.append('files', _files)
+        let data = new FormData();
 
+        for (let i = 0; i < files.length; i++) {
+            data.append('files[]', files[i]);
+        }
+        
         ApiService.uploadFiles(data)
         .then(resp =>{
             console.log(resp)
@@ -115,7 +130,7 @@ export default class ContenedorArchivos extends Component{
                             type = 'file'
                             hidden
                             multiple
-                            onChange = {this._uploadFiles}
+                            onChange = {this._uploadFile}
                         />
                 </Segment>
             </React.Fragment>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {REGISTRARSE, LOGIN, VERIFICAR_CORREO, GET_ME_EMAIL, LOGOUT, UPLOAD_FILES} from '../utils/ApiDirections'
+import {REGISTRARSE, LOGIN, VERIFICAR_CORREO, GET_ME_EMAIL, LOGOUT, UPLOAD_FILES, IN_USE} from '../utils/ApiDirections'
 
 import LocalStorageService from './LocalStorageService'
 
@@ -12,6 +12,7 @@ export default (function(){
         verificarCuenta,
         getMe,
         uploadFiles,
+        totalEnUso,
     }
 
     function registrarse(data){
@@ -103,7 +104,6 @@ export default (function(){
     }
 
     function uploadFiles(files){
-        debugger;
         return new Promise((resolve, reject) => {
             axios.post(UPLOAD_FILES, files, {
                 headers:{
@@ -120,6 +120,22 @@ export default (function(){
                     mensaje: "Error desconocido, intente mas tarde",
                     error,
                 })
+            })
+        });
+    }
+
+    function totalEnUso(){
+        return new Promise((resolve, reject) =>{
+            axios.get(IN_USE,{
+                headers:{
+                    authorization: `Bearer ${LocalStorageService.getSessionToken()}`,
+                }
+            })
+            .then(response => {
+                resolve(response.data);
+            })
+            .catch(error =>{
+                resolve(error);
             })
         });
     }
