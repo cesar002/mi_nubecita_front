@@ -6,7 +6,7 @@ import storeApp from './redux'
 import * as serviceWorker from './serviceWorker';
 
 const APP = ()=>(
-    <Provider store = {storeApp()}>
+    <Provider store = {storeApp}>
         <Router />
     </Provider>
 )

@@ -5,6 +5,7 @@ export const ADD_FILE = 'ADD_FILE';
 export const ADD_FAVORITE_FILE = 'ADD_FAVORITE_FILE';
 export const REMOVE_FILE = 'REMOVE_FILE'
 export const REMOVE_FAVORITE_FILE = 'REMOVE_FAVORITE_FILE'
+export const DELETE_INFO = 'DELETE_INFO'
 
 export const setFilesUser = (files) =>{
     return{
@@ -52,5 +53,11 @@ export const removeFavoriteFile = (idFile) =>{
     return {
         type: REMOVE_FAVORITE_FILE,
         payload: { idFile } 
+    }
+}
+
+export const deleteInfo = () =>{
+    return{
+        type: DELETE_INFO,
     }
 }

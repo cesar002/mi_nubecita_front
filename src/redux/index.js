@@ -4,18 +4,17 @@ import thunk from 'redux-thunk'
 
 import state from './state'
 
-const composeEnhancers = composeWithDevTools({
-    realtime: true,
-    hostname: 'localhost',
-    port: 3000
-  })
 
+// const configureStore = function(){
+//     let store = createStore(state,
+//         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+//     );
+//     return store
+// }
 
-const configureStore = function(){
-    let store = createStore(state,
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
-    );
-    return store
-}
+const store = createStore(
+    state,
+    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
 
-export default configureStore;
+export default store;

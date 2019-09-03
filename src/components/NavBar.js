@@ -7,6 +7,8 @@ import ApiService from '../services/ApiService'
 import LocalStorageService from '../services/LocalStorageService'
 
 import * as actions from '../redux/actions/logoutActions'
+import * as userAction from '../redux/actions/userDataAction'
+import * as userFilesAction from '../redux/actions/userDataFilesActions'
 
 class NavBar extends Component{
     constructor(props){
@@ -21,6 +23,8 @@ class NavBar extends Component{
         ApiService.logout()
         .then(res =>{
             this.props.setLogoutAction(false)
+            this.props.deleteUserData();
+            this.props.deleteUserDataFiles();
             LocalStorageService.deleteSessionToken()
             this.props.history.push('/')
         })
@@ -57,7 +61,7 @@ class NavBar extends Component{
 
 const mapStateToProps = state =>{
     return{
-        userData: state.userData.userData,
+        userData: state.userData,
     }
 }
 
@@ -65,6 +69,12 @@ const mapDispatchToProps = dispatch =>{
     return{
         setLogoutAction(active){
             dispatch(actions.logoutRequestActive(active));
+        },
+        deleteUserData(){
+            dispatch(userAction.deleteEmailUser())
+        },
+        deleteUserDataFiles(){
+            dispatch(userFilesAction.deleteInfo())
         }
     }
 }

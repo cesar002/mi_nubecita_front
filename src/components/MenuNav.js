@@ -8,8 +8,9 @@ import * as actions from '../redux/actions/menuActions';
 import FormatBytes from '../utils/FormatBytes'
 import * as fileActions from '../redux/actions/userDataFilesActions';
 import * as userActions from '../redux/actions/userDataAction'
+import {resetUploadProgress} from '../redux/actions/uploadProgressAction'
 import Apiservice from '../services/ApiService';
-import { setEnUso } from '../redux/actions/userDataAction';
+
 
 
 class MenuNav extends Component{
@@ -45,6 +46,7 @@ class MenuNav extends Component{
         .then(res => {
             this.props.addFiles(res.archivos);
             this.props.setEnUso(res.enUso)
+            this.props.resetUpload()
             this.setState({upload: false})
         })
         .catch(err =>{
@@ -85,8 +87,10 @@ class MenuNav extends Component{
     }
 
     _convertPorcentaje(){
-        let result = (this.props.userData.enUso * 100)/(this.props.userData.limiteAlmacenaje.limite * 1000)
-        return Math.round(result)
+        if(!this.props.userData){
+            return 0;
+        }
+        return Math.round(this.props.userData.enUso * 100)/(this.props.userData.limiteAlmacenaje.limite * 1000)
     }
 
     render(){
@@ -97,6 +101,10 @@ class MenuNav extends Component{
                     {!isMobile && this._renderDesktopInterface()}
                 </Segment>
                 <Segment basic>
+                    {
+                        this.state.upload &&
+                        <Progress percent = {this.props.uploadProgress.inProgress} size = 'small' color = 'green' label = 'subiendo archivos' progress active/>
+                    }
                     <Button loading = {this.state.upload} color = 'teal' fluid labelPosition = 'left' icon = 'cloud upload' content = 'Subir archivo' onClick = {()=> this.fileInputRef.current.click()} />
                     <input 
                         ref = {this.fileInputRef}
@@ -107,7 +115,7 @@ class MenuNav extends Component{
                     />
                 </Segment>
                 <Segment basic>
-                    {this.props.userData && 
+                    {(this.props.userData && Object.keys(this.props.userData).length !== 0) && 
                     <Progress percent = {this._convertPorcentaje()} size = 'tiny' color = 'teal'>
                         {FormatBytes(this.props.userData.enUso)} de {this.props.userData.limiteAlmacenaje.limite/1000000} GB usados
                     </Progress>
@@ -121,8 +129,9 @@ class MenuNav extends Component{
 
 const mapStateToProps = state => {
     return{
-        menu: state.menuData,
-        userData: state.userData.userData,
+        menu: state.menuData.menuData,
+        userData: state.userData,
+        uploadProgress: state.uploadProgress,
     }
 }
 
@@ -136,6 +145,9 @@ const mapDispatchToProps = dispatch =>{
         },
         setEnUso(enUso){
             dispatch(userActions.setEnUso(enUso))
+        },
+        resetUpload(){
+            dispatch(resetUploadProgress())
         }
     }
 }

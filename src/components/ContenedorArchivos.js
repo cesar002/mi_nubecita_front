@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
-import {Grid, Container, Segment, Header, Icon, Button} from 'semantic-ui-react';
+import {Grid, Container, Segment, Header, Icon, Button, Dropdown} from 'semantic-ui-react';
 import {ContextMenuTrigger} from 'react-contextmenu'
 import _ from 'lodash'
 
@@ -33,20 +33,35 @@ class ContenedorArchivos extends Component{
         }
     }
     _renderGridRow(arrayRoot){
-        return arrayRoot.map((array, key) => {
-            return(
-                <Grid.Row key={key} columns = {NUMBER_ELEMENT_VIEW}>
-                    {this._renderGridElement(array)}
-                </Grid.Row>
-            )
-        })
+        
+        return(
+        <React.Fragment>
+            <Grid.Row>
+                <Grid.Column width = {16}>
+                    <span>
+                        Ordenar por: {' '}
+                        <Dropdown inline text = 'predeterminado' simple item />
+                    </span>
+                </Grid.Column>
+            </Grid.Row>
+            {
+                arrayRoot.map((array, key) => {
+                    return(
+                        <Grid.Row key={key} columns = {NUMBER_ELEMENT_VIEW}>
+                            {this._renderGridElement(array)}
+                        </Grid.Row>
+                    )
+                })
+            }
+        </React.Fragment>
+        )
     }
 
     _renderGridElement(elements){
-        return elements.map((item, key) => {
+        return elements.map((item, key) => {            
             return(
                 <Grid.Column key = {key}>
-                    <FileItem nombreArchivo = {item.nombreCorto} titulo = {item.nombre} fecha = {item.fechaSubida} />
+                    <FileItem nombreArchivo = {item.nombreCorto} titulo = {item.nombre} fecha = {item.fechaSubida} tipo={item.tipo} />
                 </Grid.Column>
             )
         })

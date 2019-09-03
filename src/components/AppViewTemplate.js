@@ -5,7 +5,7 @@ import {isMobile} from 'react-device-detect'
 import {withRouter} from 'react-router-dom'
 
 import NavBar from './NavBar'
-import Menu from './MenuNav'
+import MenuComponent from './MenuNav'
 import DetallesArchivo from './DetallesFile'
 import Loader from './Loading';
 
@@ -34,7 +34,7 @@ class AppViewTemplate extends Component{
 
     _verifySession(){
         if(LocalStorageService.existSessionToken()){
-            if(!this.props.userData){
+            if(!this.props.userData || !this.props.userData.enUso){
                 this.setState({consultando: true})
                 Promise.all([ApiService.getMe(), ApiService.getFiles()])
                 .then(values => {
@@ -47,6 +47,10 @@ class AppViewTemplate extends Component{
                     LocalStorageService.deleteSessionToken()
                     this.props.history.push('/');
                 })
+            }else{
+                // this.setState({consultando: false})
+                // LocalStorageService.deleteSessionToken()
+                // this.props.history.push('/');
             }
         }else{
             this.props.history.push('/');
@@ -57,16 +61,19 @@ class AppViewTemplate extends Component{
     _renderDesktopInterface(){
         let Element = this.props.component
        return(
-            <Grid>
-                <Grid.Column width={3}>
-                    <Menu />
-                </Grid.Column>
-                <Grid.Column width={9}>
-                    {this.props.component && <Element />}
-                </Grid.Column>
-                <Grid.Column width = {4}>
-                    <DetallesArchivo />
-                </Grid.Column>
+            <Grid columns = {3}>
+                <Grid.Row>
+                    <Grid.Column width={3}>
+                        <MenuComponent />
+                    </Grid.Column>
+                    <Grid.Column width={9}>
+                        {this.props.component && <Element />}
+                    </Grid.Column>
+                    <Grid.Column width = {4}>
+                        <DetallesArchivo />
+                    </Grid.Column>
+                </Grid.Row>
+                <Grid.Row />
             </Grid>
        )
     }
@@ -77,7 +84,7 @@ class AppViewTemplate extends Component{
             <Grid>
                 <Grid.Column>
                     <Grid.Row>
-                        <Menu />
+                        <MenuComponent />
                     </Grid.Row>
                     <Grid.Row>
                         {this.props.component && <Element />}
@@ -106,6 +113,7 @@ class AppViewTemplate extends Component{
 const mapStateTuProps = state =>{
     return{
         logoutActive: state.logout.logoutActive,
+        userData: state.userData
     }
 }
 

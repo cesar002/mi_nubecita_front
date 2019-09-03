@@ -49,4 +49,5 @@ body{
     display: flex;
     flex: 3;
     width: 100%;
+    z-index: 999999;
 }

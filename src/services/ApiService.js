@@ -1,4 +1,6 @@
 import axios from 'axios';
+import store from '../redux/index'
+import * as uploadActions from '../redux/actions/uploadProgressAction'
 
 import {
     REGISTRARSE, LOGIN, 
@@ -113,6 +115,13 @@ export default (function(){
                 headers:{
                     'content-type': 'multipart/form-data',
                     authorization: `Bearer ${LocalStorageService.getSessionToken()}`,
+                },
+                onUploadProgress: progressEvent => {
+
+                    let porcentaje = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    store.dispatch(uploadActions.addUploadProgress({
+                        inProgress: porcentaje,
+                    }))
                 }
             })
             .then(response =>{

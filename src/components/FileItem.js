@@ -10,11 +10,61 @@ class FileItem extends PureComponent{
 
         this._toggleIsChecked = this._toggleIsChecked.bind(this)
         this._toggleCheckedIsVisible = this._toggleCheckedIsVisible.bind(this)
-
+        this.getStylesDefault = this.getStylesDefault.bind(this)
 
         this.state = {
             isCheked: false,
             checkedIsVisible: false,
+        }
+    }
+
+    getStylesDefault(){
+        switch(this.props.tipo){
+            case 'jpg':
+                return {...defaultStyles.jpg, labelUppercase: true}
+            case 'jpeg':
+                return {...defaultStyles.jpeg, labelUppercase: true}
+            case 'png':
+                return {...defaultStyles.png, labelUppercase: true}
+            case 'gif':
+                return {...defaultStyles.gif, labelUppercase: true}
+            case 'bmp':
+                return {...defaultStyles.bmp, labelUppercase: true}
+            case 'pdf':
+                return {...defaultStyles.pdf, labelUppercase: true}
+            case 'avi':
+                return {...defaultStyles.avi, labelUppercase: true}
+            case 'mp4':
+                return {...defaultStyles.mp4, labelUppercase: true}
+            case 'mkv': 
+                return {...defaultStyles.mkv, labelUppercase: true}
+            case 'wmv':
+                return {...defaultStyles.wmv, labelUppercase: true}
+            case 'mp3':
+                return {...defaultStyles.mp3, labelUppercase: true}
+            case 'mpeg':
+                return {...defaultStyles.mpeg, labelUppercase: true}
+            case 'mpg':
+                return {...defaultStyles.mpg, labelUppercase: true}
+            case 'pdf':
+                return {...defaultStyles.pdf, labelUppercase: true}
+            case 'wav':
+                return {...defaultStyles.wav, labelUppercase: true}
+            case 'exe':
+                return {...defaultStyles.exe, labelUppercase: true}
+            case 'msi':
+                return {...defaultStyles.exe, labelUppercase: true}
+            case 'rar':
+                return {...defaultStyles.rar, labelUppercase: true}
+            case '7zip':
+                return {...defaultStyles["7zip"], labelUppercase: true}
+            default:
+                return {
+                    extension:"File",
+                    labelUppercase: true,
+                    labelColor: '#5858FA'
+                }
+            
         }
     }
 
@@ -30,6 +80,7 @@ class FileItem extends PureComponent{
 
 
     render(){
+        let stylesFile = this.getStylesDefault();
         return(
             <React.Fragment>
                 <div className = {this.state.isCheked? 'file-element-cheked' : 'file-element'} 
@@ -44,7 +95,7 @@ class FileItem extends PureComponent{
                         <Container fluid textAlign = 'center'>
                         <Segment basic>
                             <Header icon>
-                                <FileIcon extension = 'pdf' {...defaultStyles.pdf} size = {55} />
+                                <FileIcon extension = {this.props.tipo} {...stylesFile} size = {55} />
                                 <p style={{fontSize: '0.9rem'}}>{this.props.nombreArchivo}</p>
                             </Header>
                             <Segment.Inline>

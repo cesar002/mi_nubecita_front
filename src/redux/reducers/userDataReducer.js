@@ -5,18 +5,21 @@ export default (state ={}, action) => {
         case SET_EMAIL_USER:
             return{
                 ...state,
-                userData: action.payload.userData
+                me: action.payload.userData.me,
+                enUso: action.payload.userData.enUso,
+                limiteAlmacenaje: action.payload.userData.limiteAlmacenaje,
             }
         case DELETE_EMAIL_USER:
             return{
                 ...state,
-                userData: {}
+                me: '',
+                enUso: undefined,
+                limiteAlmacenaje: {}
             }
         case SET_EN_USO:
             return{
                 ...state,
                 enUso: action.payload.enUso,
-
             }
         default: return state;
     }
