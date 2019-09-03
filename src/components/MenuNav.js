@@ -6,18 +6,51 @@ import {isMobile} from 'react-device-detect'
 
 import * as actions from '../redux/actions/menuActions';
 import FormatBytes from '../utils/FormatBytes'
+import * as fileActions from '../redux/actions/userDataFilesActions';
+import * as userActions from '../redux/actions/userDataAction'
+import Apiservice from '../services/ApiService';
+import { setEnUso } from '../redux/actions/userDataAction';
+
 
 class MenuNav extends Component{
     constructor(props){
         super(props)
 
+        this.uploadFiles = this.uploadFiles.bind(this)
         this.fileInputRef = React.createRef()
         this.renderMenuElements = this.renderMenuElements.bind(this)
         this.handleMenuItemClick = this.handleMenuItemClick.bind(this)
 
+        this.state = {
+            upload:false,
+        }
+
     }
 
-    
+    uploadFiles(e){
+        let files = e.target.files
+        if(!files){
+            return
+        }
+
+        this.setState({upload: true})
+
+        let data = new FormData();
+
+        for (let i = 0; i < files.length; i++) {
+            data.append('files[]', files[i]);
+        }
+
+        Apiservice.uploadFiles(data)
+        .then(res => {
+            this.props.addFiles(res.archivos);
+            this.props.setEnUso(res.enUso)
+            this.setState({upload: false})
+        })
+        .catch(err =>{
+            this.setState({upload: false})
+        })
+    }
 
     handleMenuItemClick(menuItem){
         this.props.activeMenuElement(menuItem.idMenu)
@@ -64,12 +97,13 @@ class MenuNav extends Component{
                     {!isMobile && this._renderDesktopInterface()}
                 </Segment>
                 <Segment basic>
-                    <Button color = 'teal' fluid labelPosition = 'left' icon = 'cloud upload' content = 'Subir archivo' onClick = {()=> this.fileInputRef.current.click()} />
+                    <Button loading = {this.state.upload} color = 'teal' fluid labelPosition = 'left' icon = 'cloud upload' content = 'Subir archivo' onClick = {()=> this.fileInputRef.current.click()} />
                     <input 
                         ref = {this.fileInputRef}
                         type = 'file'
                         hidden
                         multiple
+                        onChange = {this.uploadFiles}
                     />
                 </Segment>
                 <Segment basic>
@@ -96,6 +130,12 @@ const mapDispatchToProps = dispatch =>{
     return{
         activeMenuElement(idMenu){
             dispatch(actions.activeMenuElement(idMenu))
+        },
+        addFiles(files){
+            dispatch(fileActions.addFile(files))
+        },
+        setEnUso(enUso){
+            dispatch(userActions.setEnUso(enUso))
         }
     }
 }

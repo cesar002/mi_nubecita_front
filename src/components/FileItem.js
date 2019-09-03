@@ -1,9 +1,10 @@
 import React, { PureComponent } from 'react';
 import {Segment, Container, Header, Checkbox, Item} from 'semantic-ui-react'
 import FileIcon, { defaultStyles } from 'react-file-icon';
+import * as moment from 'moment';
 import PropTypes from 'prop-types';
 
-export default class FileItem extends PureComponent{
+class FileItem extends PureComponent{
     constructor(props){
         super(props)
 
@@ -15,14 +16,6 @@ export default class FileItem extends PureComponent{
             isCheked: false,
             checkedIsVisible: false,
         }
-    }
-
-    static propTypes = {
-
-    }
-
-    static defaultProps = {
-
     }
 
     _toggleCheckedIsVisible(){
@@ -39,7 +32,10 @@ export default class FileItem extends PureComponent{
     render(){
         return(
             <React.Fragment>
-                <div className = {this.state.isCheked? 'file-element-cheked' : 'file-element'} onMouseOver = {this._toggleCheckedIsVisible} onMouseOut = {this._toggleCheckedIsVisible} onClick = {this._toggleIsChecked}>
+                <div className = {this.state.isCheked? 'file-element-cheked' : 'file-element'} 
+                    onMouseOver = {this._toggleCheckedIsVisible} onMouseOut = {this._toggleCheckedIsVisible} 
+                    onClick = {this._toggleIsChecked} title = {this.props.titulo}
+                >
                     <div className = 'file-element-check'>
                         { (this.state.checkedIsVisible || this.state.isCheked) && 
                         <Checkbox checked = {this.state.isCheked} style = {{marginLeft: '0.5rem', marginTop: '0.5rem'}} />}
@@ -49,11 +45,11 @@ export default class FileItem extends PureComponent{
                         <Segment basic>
                             <Header icon>
                                 <FileIcon extension = 'pdf' {...defaultStyles.pdf} size = {55} />
-                                <p style={{fontSize: '10px'}}>{this.props.nombreArchivo}</p>
+                                <p style={{fontSize: '0.9rem'}}>{this.props.nombreArchivo}</p>
                             </Header>
                             <Segment.Inline>
-                                <Header as = 'h5' color = 'grey'>
-                                    10 ene. 2019
+                                <Header as = 'h6' color = 'grey'>
+                                    {moment(this.props.fecha).format('ll')}
                                 </Header>
                             </Segment.Inline>
                         </Segment>
@@ -64,6 +60,17 @@ export default class FileItem extends PureComponent{
             </React.Fragment>
         )
     }
-
-
 }
+
+FileItem.propTypes = {
+    nombreArchivo: PropTypes.string.isRequired,
+    titulo: PropTypes.string,
+    fecha: PropTypes.string,
+}
+
+FileItem.defaultProps = {
+    fecha: '',
+    titulo: '',
+}
+
+export default FileItem;

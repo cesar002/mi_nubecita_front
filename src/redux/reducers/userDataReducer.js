@@ -1,4 +1,4 @@
-import {SET_EMAIL_USER, DELETE_EMAIL_USER} from '../actions/userDataAction';
+import {SET_EMAIL_USER, DELETE_EMAIL_USER, SET_EN_USO} from '../actions/userDataAction';
 
 export default (state ={}, action) => {
     switch(action.type){
@@ -11,6 +11,12 @@ export default (state ={}, action) => {
             return{
                 ...state,
                 userData: {}
+            }
+        case SET_EN_USO:
+            return{
+                ...state,
+                enUso: action.payload.enUso,
+
             }
         default: return state;
     }

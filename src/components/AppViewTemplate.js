@@ -40,11 +40,12 @@ class AppViewTemplate extends Component{
                 .then(values => {
                     this.props.setUserData(values[0])
                     this.props.setFiles(values[1])
-                    // console.log(values)
                     this.setState({consultando: false})
                 })
                 .catch(error =>{    
-                    console.log(error)
+                    this.setState({consultando: false})
+                    LocalStorageService.deleteSessionToken()
+                    this.props.history.push('/');
                 })
             }
         }else{

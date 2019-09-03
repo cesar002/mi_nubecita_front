@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import {
     SET_FILES_USER, SET_FAVORITE_FILES_USER, SET_RECENT_FILES,
     ADD_FAVORITE_FILE, ADD_FILE,
@@ -29,7 +31,8 @@ export default (state = initialState, action) => {
             }
         case ADD_FILE:
             return{
-
+                ...state,
+                files: _.concat(state.files, action.payload.file)
             }
         case ADD_FAVORITE_FILE:
             return{

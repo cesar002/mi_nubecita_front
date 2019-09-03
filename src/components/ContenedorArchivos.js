@@ -19,20 +19,6 @@ class ContenedorArchivos extends Component{
         this.fileInputReference = React.createRef()
 
         this.state = {
-            archivos:[
-                {nombre: 'documento 1',  tipo: 'document',  extencion: '.docx', fecha: '10 junio 2009'},
-                {nombre: 'documento 2',  tipo: 'audio',     extencion: '.mp3',  fecha: '15 julio 2009'},
-                {nombre: 'documento 3',  tipo: 'acrobat',   extencion: '.pdf',  fecha: '10 septiembre 2009'},
-                {nombre: 'documento 4',  tipo: 'document',  extencion: '.ppt',  fecha: '25 abril 2009'},
-                {nombre: 'documento 5',  tipo: 'image',     extencion: '.jpg',  fecha: '30 enero 2009'},
-                {nombre: 'documento 6',  tipo: 'video',     extencion: '.mp4',  fecha: '01 febrero 2009'},
-                {nombre: 'documento 7',  tipo: '3d',        extencion: '.bld',  fecha: '11 marzo 2009'},
-                {nombre: 'documento 8',  tipo: 'compressed',extencion: '.rar',  fecha: '08 septiembre 2009'},
-                {nombre: 'documento 9',  tipo: 'document',  extencion: '.xlsx', fecha: '06 mayo 2009'},
-                {nombre: 'documento 10', tipo: 'acrobat',   extencion: '.pdf',  fecha: '11 diciembre 2009'},
-                {nombre: 'documento 11', tipo: 'image',     extencion: '.jpg',  fecha: '22 octubre 2009'},
-            ],
-            files: null,
             scrollEnabled: false,
             isEmpty: true,
             uploadFiles: false,
@@ -42,7 +28,7 @@ class ContenedorArchivos extends Component{
 
     componentWillMount(){
         this.props.userFiles.files.length === 0? this.setState({isEmpty: true}) : this.setState({isEmpty: false})
-        if(this.state.archivos.length > 15){
+        if(this.props.userFiles.files.length > 15){
             this.setState({scrollEnabled: true})
         }
     }
@@ -60,7 +46,7 @@ class ContenedorArchivos extends Component{
         return elements.map((item, key) => {
             return(
                 <Grid.Column key = {key}>
-                    <FileItem nombreArchivo = {item.nombre} />
+                    <FileItem nombreArchivo = {item.nombreCorto} titulo = {item.nombre} fecha = {item.fechaSubida} />
                 </Grid.Column>
             )
         })
