@@ -10,6 +10,10 @@ import FileItem from '../components/FileItem'
 import MenuContextual from '../components/ContextMenuArchivos'
 import ApiService from '../services/ApiService';
 
+import * as fileActions from '../redux/actions/userDataFilesActions';
+import * as userActions from '../redux/actions/userDataAction'
+import {resetUploadProgress} from '../redux/actions/uploadProgressAction'
+
 class ContenedorArchivos extends Component{
 
     constructor(props){
@@ -87,6 +91,9 @@ class ContenedorArchivos extends Component{
         
         ApiService.uploadFiles(data)
         .then(resp =>{
+            this.props.addFiles(resp.archivos);
+            this.props.setEnUso(resp.enUso)
+            this.props.resetUpload()
             this.setState({uploadFiles: false})
         })
         .catch(err =>{
@@ -151,4 +158,18 @@ const mapStateToProps = state =>{
     }
 }
 
-export default connect(mapStateToProps)(ContenedorArchivos)
+const mapDispatchToProps = dispatch =>{
+    return{
+        addFiles(files){
+            dispatch(fileActions.addFile(files))
+        },
+        setEnUso(enUso){
+            dispatch(userActions.setEnUso(enUso))
+        },
+        resetUpload(){
+            dispatch(resetUploadProgress())
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContenedorArchivos)

@@ -55,12 +55,11 @@ class FileItem extends PureComponent{
             case 'msi':
                 return {...defaultStyles.exe, labelUppercase: true}
             case 'rar':
-                return {...defaultStyles.rar, labelUppercase: true}
+                return {...defaultStyles.rar, labelUppercase: true, labelColor: '#DBA901'}
             case '7zip':
                 return {...defaultStyles["7zip"], labelUppercase: true}
             default:
                 return {
-                    extension:"File",
                     labelUppercase: true,
                     labelColor: '#5858FA'
                 }

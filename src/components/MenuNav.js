@@ -4,8 +4,9 @@ import { withRouter } from 'react-router-dom'
 import {Menu, Icon, Progress, Segment, Button} from 'semantic-ui-react'
 import {isMobile} from 'react-device-detect'
 
-import * as actions from '../redux/actions/menuActions';
+
 import FormatBytes from '../utils/FormatBytes'
+import * as actions from '../redux/actions/menuActions';
 import * as fileActions from '../redux/actions/userDataFilesActions';
 import * as userActions from '../redux/actions/userDataAction'
 import {resetUploadProgress} from '../redux/actions/uploadProgressAction'
