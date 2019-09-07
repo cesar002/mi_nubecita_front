@@ -8,6 +8,8 @@ import NavBar from './NavBar'
 import MenuComponent from './MenuNav'
 import DetallesArchivo from './DetallesFile'
 import Loader from './Loading';
+import SimpleModal from './SimpleModal'
+import MenuContextual from './ContextMenuArchivos'
 
 import * as actions from '../redux/actions/userDataAction';
 import * as fileActions from '../redux/actions/userDataFilesActions'
@@ -101,6 +103,8 @@ class AppViewTemplate extends Component{
         return(
             <React.Fragment>
                 <NavBar />
+                <SimpleModal />
+                <MenuContextual idContextTrigger = 'fileContainer' />
                 {this.props.logoutActive && <Loader texto = 'Cerrando sesión...' />}
                 {!isMobile && this._renderDesktopInterface()}
                 {isMobile && this._renderMobileInterface()}
@@ -113,7 +117,7 @@ class AppViewTemplate extends Component{
 const mapStateTuProps = state =>{
     return{
         logoutActive: state.logout.logoutActive,
-        userData: state.userData
+        userData: state.userData,
     }
 }
 

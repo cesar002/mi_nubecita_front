@@ -5,7 +5,8 @@ import * as uploadActions from '../redux/actions/uploadProgressAction'
 import {
     REGISTRARSE, LOGIN, 
     VERIFICAR_CORREO, GET_ME_EMAIL, LOGOUT, 
-    UPLOAD_FILES, FILES
+    UPLOAD_FILES, FILES, DELETE_FILES,
+    GET_FILES_DELETED,
 } from '../utils/ApiDirections'
 
 import LocalStorageService from './LocalStorageService'
@@ -19,6 +20,8 @@ export default (function(){
         getMe,
         uploadFiles,
         getFiles,
+        deleteFiles,
+        getDeletedFiles,
     }
 
     function registrarse(data){
@@ -27,12 +30,16 @@ export default (function(){
             .then(response =>{
                 resolve(response.data);
             })
-            .catch(err => {
-                reject({
-                    status: -1,
-                    mensaje: "Error desconocido, intente mas tarde",
-                    error: err
-                });
+            .catch(error => {
+                if(!error.response){
+                    reject({
+                        status: -1,
+                        mensaje: "Error desconocido, intente mas tarde",
+                        error,
+                    })
+                }else{
+                    reject(error.response.data)
+                }
             })
         });
     }
@@ -44,11 +51,15 @@ export default (function(){
                     resolve(response.data);
             })
             .catch(error => {
-                reject({
-                    status: -1,
-                    mensaje: "Error desconocido, intente mas tarde",
-                    error
-                })
+                if(!error.response){
+                    reject({
+                        status: -1,
+                        mensaje: "Error desconocido, intente mas tarde",
+                        error,
+                    })
+                }else{
+                    reject(error.response.data)
+                }
             })
         });
     }
@@ -64,11 +75,15 @@ export default (function(){
                 resolve(response.data)
             })
             .catch(error =>{
-                reject({
-                    status: -1,
-                    mensaje: "Error desconocido, intente mas tarde",
-                    error
-                })
+                if(!error.response){
+                    reject({
+                        status: -1,
+                        mensaje: "Error desconocido, intente mas tarde",
+                        error,
+                    })
+                }else{
+                    reject(error.response.data)
+                }
             })
         })
     }
@@ -80,11 +95,15 @@ export default (function(){
                 resolve(response.data);
             })
             .catch(error => {
-                reject({
-                    status: -1,
-                    mensaje: "Error desconocido, intente mas tarde",
-                    error
-                })
+                if(!error.response){
+                    reject({
+                        status: -1,
+                        mensaje: "Error desconocido, intente mas tarde",
+                        error,
+                    })
+                }else{
+                    reject(error.response.data)
+                }
             })
         })
     }
@@ -100,11 +119,15 @@ export default (function(){
                 resolve(response.data)
             })
             .catch(error => {
-                reject({
-                    status: -1,
-                    mensaje: "Error desconocido, intente mas tarde",
-                    error
-                })
+                if(!error.response){
+                    reject({
+                        status: -1,
+                        mensaje: "Error desconocido, intente mas tarde",
+                        error,
+                    })
+                }else{
+                    reject(error.response.data)
+                }
             })
         });
     }
@@ -128,11 +151,15 @@ export default (function(){
                 resolve(response.data)
             })
             .catch(error =>{
-                reject({
-                    status: -1,
-                    mensaje: "Error desconocido, intente mas tarde",
-                    error,
-                })
+                if(!error.response){
+                    reject({
+                        status: -1,
+                        mensaje: "Error desconocido, intente mas tarde",
+                        error,
+                    })
+                }else{
+                    reject(error.response.data)
+                }
             })
         });
     }
@@ -148,7 +175,64 @@ export default (function(){
                 resolve(response.data)
             })
             .catch(error =>{
-                resolve(error)
+                if(!error.response){
+                    reject({
+                        status: -1,
+                        mensaje: "Error desconocido, intente mas tarde",
+                        error,
+                    })
+                }else{
+                    reject(error.response.data)
+                }
+            })
+        })
+    }
+
+    function deleteFiles(files){
+        return new Promise((resolve, reject) => {
+            axios.delete(DELETE_FILES, {
+                data: files,
+                headers:{
+                    authorization: `Bearer ${LocalStorageService.getSessionToken()}`,
+                }
+            })
+            .then(response => {
+                resolve(response.data);
+            })
+            .catch(error => {
+                if(!error.response){
+                    reject({
+                        status: -1,
+                        mensaje: "Error desconocido, intente mas tarde",
+                        error,
+                    })
+                }else{
+                    reject(error.response.data);
+                }
+            })
+        });
+    }
+
+    function getDeletedFiles(){
+        return new Promise((resolve, reject)=>{
+            axios.get(GET_FILES_DELETED, {
+                headers:{
+                    authorization: `Bearer ${LocalStorageService.getSessionToken()}`,
+                }
+            })
+            .then(response =>{
+                resolve(response.data);
+            })
+            .catch(error => {
+                if(!error.response){
+                    reject({
+                        status: -1,
+                        mensaje: "Error desconocido, intente mas tarde",
+                        error,
+                    })
+                }else{
+                    reject(error.response.data);
+                }
             })
         })
     }

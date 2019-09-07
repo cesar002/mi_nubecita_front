@@ -11,7 +11,7 @@ import * as fileActions from '../redux/actions/userDataFilesActions';
 import * as userActions from '../redux/actions/userDataAction'
 import {resetUploadProgress} from '../redux/actions/uploadProgressAction'
 import Apiservice from '../services/ApiService';
-
+import * as simpleModalActions from '../redux/actions/SimpleModalActions'
 
 
 class MenuNav extends Component{
@@ -30,6 +30,7 @@ class MenuNav extends Component{
     }
 
     uploadFiles(e){
+        let sizeFiles = 0;
         let files = e.target.files
         if(!files){
             return
@@ -41,8 +42,21 @@ class MenuNav extends Component{
 
         for (let i = 0; i < files.length; i++) {
             data.append('files[]', files[i]);
+            sizeFiles = sizeFiles + files[i].size
         }
 
+        if(sizeFiles > this.props.userData.limiteAlmacenaje.limite){
+            this.props.addSimpleModalContent({
+                iconName: 'disk',
+                titulo: 'Ha superado su limite de almacenamiento',
+                texto: 'Los archivos que está intentado subir, han superado su limite de almacenamiento, si desea aumentarlo solicite un incremento de almacenaje',
+                buttonColor: 'red',
+            })
+            this.props.openSimpleModal()
+            this.setState({upload: false})
+            return
+        }
+        
         Apiservice.uploadFiles(data)
         .then(res => {
             this.props.addFiles(res.archivos);
@@ -51,6 +65,14 @@ class MenuNav extends Component{
             this.setState({upload: false})
         })
         .catch(err =>{
+            this.props.resetUpload()
+            this.props.addSimpleModalContent({
+                iconName: 'disk',
+                titulo: 'Ha superado su limite de almacenamiento',
+                texto: err.mensaje,
+                buttonColor: 'red',
+            })
+            this.props.openSimpleModal()
             this.setState({upload: false})
         })
     }
@@ -118,7 +140,7 @@ class MenuNav extends Component{
                 <Segment basic>
                     {(this.props.userData && Object.keys(this.props.userData).length !== 0) && 
                     <Progress percent = {this._convertPorcentaje()} size = 'tiny' color = 'teal'>
-                        {FormatBytes(this.props.userData.enUso)} de {this.props.userData.limiteAlmacenaje.limite/1000000} GB usados
+                        {FormatBytes(this.props.userData.enUso)} de {this.props.userData.limiteAlmacenaje.limite/1073741824} GB usados
                     </Progress>
                     }
                 </Segment>
@@ -149,6 +171,12 @@ const mapDispatchToProps = dispatch =>{
         },
         resetUpload(){
             dispatch(resetUploadProgress())
+        },
+        addSimpleModalContent(modalContent){
+            dispatch(simpleModalActions.addModalContent(modalContent))
+        },
+        openSimpleModal(){
+            dispatch(simpleModalActions.openModal())
         }
     }
 }

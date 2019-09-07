@@ -7,7 +7,7 @@ import _ from 'lodash'
 import {NUMBER_ELEMENT_VIEW} from '../utils/Constants'
 
 import FileItem from '../components/FileItem'
-import MenuContextual from '../components/ContextMenuArchivos'
+
 import ApiService from '../services/ApiService';
 
 import * as fileActions from '../redux/actions/userDataFilesActions';
@@ -20,32 +20,52 @@ class ContenedorArchivos extends Component{
         super(props)
 
         this._uploadFiles = this._uploadFiles.bind(this)
+        this._orderFiles = this._orderFiles.bind(this)
         this.fileInputReference = React.createRef()
+        this.selectFile = this.selectFile.bind(this)
 
         this.state = {
             scrollEnabled: false,
             isEmpty: true,
             uploadFiles: false,
+            opcionesOrdenar:[
+                {key: 0, text: 'Seleccione una opción', value: 0},
+                {key: 1, text: 'Nombre de archivo', value: 1},
+                {key: 2, text: 'Fecha de subida', value: 2},
+                {key: 3, text: 'Tipo de archivo', value: 3},
+                {key: 4, text: 'Tamaño de archivo', value: 4},
+            ],
         }
 
     }
 
     componentWillMount(){
         this.props.userFiles.files.length === 0? this.setState({isEmpty: true}) : this.setState({isEmpty: false})
-        if(this.props.userFiles.files.length > 15){
+        if(this.props.userFiles.files.length > 20){
             this.setState({scrollEnabled: true})
         }
+
+        ApiService.getDeletedFiles()
+        .then(res => console.log(res))
     }
+
+    selectFile(file){
+        this.state.filesSelected.push(file);
+    }
+
     _renderGridRow(arrayRoot){
         
         return(
         <React.Fragment>
             <Grid.Row>
                 <Grid.Column width = {16}>
-                    <span>
+                    {
+                    this.props.userFiles.files.length > 0 &&
+                    <span style = {{zIndex: '2'}}>
                         Ordenar por: {' '}
-                        <Dropdown inline text = 'predeterminado' simple item />
+                        <Dropdown inline options={this.state.opcionesOrdenar} defaultValue={this.state.opcionesOrdenar[0].value} onChange = {(e,data)=>{this._orderFiles(data.value)}} />
                     </span>
+                    }
                 </Grid.Column>
             </Grid.Row>
             {
@@ -61,11 +81,31 @@ class ContenedorArchivos extends Component{
         )
     }
 
+    _orderFiles(tipo){
+        switch(tipo){
+            case 0:
+            break;
+            case 1:
+                this.props.orderByNombre();
+            break;
+            case 2:
+                this.props.orderByFecha();
+            break;
+            case 3:
+                this.props.orderByTipo();
+            break;
+            case 4:
+                this.props.orderBySize();
+            break;
+            default:
+        }
+    }
+
     _renderGridElement(elements){
         return elements.map((item, key) => {            
             return(
                 <Grid.Column key = {key}>
-                    <FileItem nombreArchivo = {item.nombreCorto} titulo = {item.nombre} fecha = {item.fechaSubida} tipo={item.tipo} />
+                    <FileItem idFile = {item.idArchivo} nombreArchivo = {item.nombreCorto} titulo = {item.nombre} fecha = {item.fechaSubida} tipo={item.tipo} selected = {item.selected} />
                 </Grid.Column>
             )
         })
@@ -77,6 +117,7 @@ class ContenedorArchivos extends Component{
     }
     _uploadFiles(e){
         let files = e.target.files
+
         if(!files){
             return
         }
@@ -95,9 +136,11 @@ class ContenedorArchivos extends Component{
             this.props.setEnUso(resp.enUso)
             this.props.resetUpload()
             this.setState({uploadFiles: false})
+            this.setState({isEmpty: false})
         })
         .catch(err =>{
             this.setState({uploadFiles: false})
+            this.setState({isEmpty: true})
         })
     }
 
@@ -138,13 +181,13 @@ class ContenedorArchivos extends Component{
     render(){
         return(
             <React.Fragment>
+                
                 <Container fluid style = {this.state.scrollEnabled? scrollStyle : {}}>
                     <Segment basic>
-                        {this.state.isEmpty && this._fileContainerWithoutFiles()}
-                        {!this.state.isEmpty && this._fileContainer()}
+                        {(this.state.isEmpty || this.props.userFiles.files.length === 0) && this._fileContainerWithoutFiles()}
+                        {(!this.state.isEmpty || this.props.userFiles.files.length !== 0) && this._fileContainer()}
                     </Segment>
                 </Container>
-                <MenuContextual idContextTrigger = 'fileContainer' />
             </React.Fragment>
         )
     }
@@ -154,7 +197,7 @@ const scrollStyle = {overflowY: 'scroll', overflowX: 'hidden', maxHeight: '40rem
 
 const mapStateToProps = state =>{
     return{
-        userFiles: state.userFiles
+        userFiles: state.userFiles,
     }
 }
 
@@ -168,6 +211,18 @@ const mapDispatchToProps = dispatch =>{
         },
         resetUpload(){
             dispatch(resetUploadProgress())
+        },
+        orderByNombre(){
+            dispatch(fileActions.orderFilesByName())
+        },
+        orderByFecha(){
+            dispatch(fileActions.orderFilesByDate())
+        },
+        orderBySize(){
+            dispatch(fileActions.orderFilesBySize())
+        },
+        orderByTipo(){
+            dispatch(fileActions.orderFilesByType())
         }
     }
 }
