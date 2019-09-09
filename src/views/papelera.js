@@ -1,19 +1,12 @@
 import React, { Component } from 'react'
 
-import AppView from '../components/AppViewTemplate'
-
-const wea = () =><p>Papelera</p>
+import AppView from '../components/AppViewTemplate';
+import ContenedorPapelera from '../components/ContenedorPapelera'
 
 export default class Papelera extends Component{
-    constructor(props){
-        super(props)
-
-    }
-
     render(){
         return(
-            <AppView component = {wea} />
-        )
+            <AppView component = {ContenedorPapelera} />
+        );
     }
-
 }

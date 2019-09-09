@@ -1,4 +1,5 @@
 export const SET_FILES_USER = 'SET_FILES_USER'
+export const SET_FILES_DELETED_USER = 'SET_FILES_DELETED_USER'
 export const SET_FAVORITE_FILES_USER = 'SET_FAVORITE_FILES_USER'
 export const SET_RECENT_FILES = 'SET_RECENT_FILE'
 export const ADD_FILE = 'ADD_FILE';
@@ -19,6 +20,13 @@ export const setFilesUser = (files) =>{
     return{
         type: SET_FILES_USER,
         payload: { files }
+    }
+}
+
+export const setFilesDeletedUser = (filesDeleted) =>{
+    return{
+        type: SET_FILES_DELETED_USER,
+        payload: {filesDeleted}
     }
 }
 

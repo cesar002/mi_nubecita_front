@@ -24,6 +24,7 @@ class AppViewTemplate extends Component{
         this._renderDesktopInterface = this._renderDesktopInterface.bind(this)
         this._renderMobileInterface = this._renderMobileInterface.bind(this)
         this._verifySession = this._verifySession.bind(this)
+        this._redirectMenu = this._redirectMenu.bind(this)
 
         this.state = {
             consultando: false,
@@ -35,14 +36,18 @@ class AppViewTemplate extends Component{
     }
 
     _verifySession(){
+        debugger;
         if(LocalStorageService.existSessionToken()){
             if(!this.props.userData || !this.props.userData.enUso){
                 this.setState({consultando: true})
-                Promise.all([ApiService.getMe(), ApiService.getFiles()])
+                Promise.all([ApiService.getMe(), ApiService.getFiles(), ApiService.getDeletedFiles()])
                 .then(values => {
                     this.props.setUserData(values[0])
                     this.props.setFiles(values[1])
+                    this.props.setFilesDeleted(values[2])
+
                     this.setState({consultando: false})
+                    this._redirectMenu();
                 })
                 .catch(error =>{    
                     this.setState({consultando: false})
@@ -57,6 +62,31 @@ class AppViewTemplate extends Component{
         }else{
             this.props.history.push('/');
         }
+    }
+
+    _redirectMenu(){
+        this.props.menuData.forEach(menuItem => {
+            if(menuItem.active){
+                switch(menuItem.idMenu){
+                    case 1:
+                        this.props.history.push('/mi_nube')
+                    break;
+                    case 2:
+                        this.props.history.push('/mi_nube/favoritos')
+                    break;
+                    case 3:
+                        this.props.history.push('/mi_nube/recientes')
+                    break;
+                    case 4:
+                        this.props.history.push('/mi_nube/fotos')
+                    break;
+                    case 5:
+                        this.props.history.push('/mi_nube/papelera')
+                    break;
+                    default:
+                }
+            }  
+        })
     }
 
 
@@ -118,6 +148,7 @@ const mapStateTuProps = state =>{
     return{
         logoutActive: state.logout.logoutActive,
         userData: state.userData,
+        menuData: state.menuData.menuData,
     }
 }
 
@@ -128,6 +159,9 @@ const mapDispatchToProps = dispatch =>{
         },
         setFiles(files){
             dispatch(fileActions.setFilesUser(files))
+        },
+        setFilesDeleted(files){
+            dispatch(fileActions.setFilesDeletedUser(files));
         }
     }
 }

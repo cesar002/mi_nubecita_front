@@ -44,9 +44,6 @@ class ContenedorArchivos extends Component{
         if(this.props.userFiles.files.length > 20){
             this.setState({scrollEnabled: true})
         }
-
-        ApiService.getDeletedFiles()
-        .then(res => console.log(res))
     }
 
     selectFile(file){
@@ -105,7 +102,7 @@ class ContenedorArchivos extends Component{
         return elements.map((item, key) => {            
             return(
                 <Grid.Column key = {key}>
-                    <FileItem idFile = {item.idArchivo} nombreArchivo = {item.nombreCorto} titulo = {item.nombre} fecha = {item.fechaSubida} tipo={item.tipo} selected = {item.selected} />
+                    <FileItem file = {item} idFile = {item.idArchivo} nombreArchivo = {item.nombreCorto} titulo = {item.nombre} fecha = {item.fechaSubida} tipo={item.tipo} selected = {item.selected} />
                 </Grid.Column>
             )
         })

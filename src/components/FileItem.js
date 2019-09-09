@@ -88,7 +88,7 @@ class FileItem extends Component{
 
     _fileHandle(status){
         if(!status){
-            this.props.addFileTemp(this.props.userFiles.files, this.props.idFile)
+            this.props.addFileTemp(this.props.file)
         }else{
             this.props.removeFileTemp(this.props.userFiles.filesSelected, this.props.idFile)
         }
@@ -138,6 +138,7 @@ FileItem.propTypes = {
     fecha: PropTypes.string,
     idFile: PropTypes.string,
     selected: PropTypes.bool,
+    file: PropTypes.object,
 }
 
 FileItem.defaultProps = {
@@ -145,6 +146,7 @@ FileItem.defaultProps = {
     titulo: '',
     idFile: '',
     selected: false,
+    file: {},
 }
 
 const mapStateToProps = state => {
@@ -155,8 +157,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch =>{
     return{
-        addFileTemp(files, idFile){
-            let file = files.find(f => f.idArchivo === idFile)
+        addFileTemp(file){
             dispatch(filesAction.addFilesTemp(file))
         },
         removeFileTemp(deleteFiles, idFile){

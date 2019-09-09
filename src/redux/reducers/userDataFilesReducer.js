@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import {
-    SET_FILES_USER, SET_FAVORITE_FILES_USER, SET_RECENT_FILES,
+    SET_FILES_USER, SET_FAVORITE_FILES_USER, SET_RECENT_FILES, SET_FILES_DELETED_USER,
     ADD_FAVORITE_FILE, ADD_FILE,
     REMOVE_FAVORITE_FILE, REMOVE_FILES, DELETE_INFO,
     ORDER_FILES_BY_NAME, ORDER_FILES_BY_DATE, ORDER_FILES_BY_SIZE, ORDER_FILES_BY_TYPE,
@@ -24,6 +24,11 @@ export default (state = initialState, action) => {
             return{
                 ...state,
                 files: action.payload.files
+            }
+        case SET_FILES_DELETED_USER:
+            return{
+                ...state,
+                deleteFiles: action.payload.filesDeleted
             }
         case SET_FAVORITE_FILES_USER:
             return{
